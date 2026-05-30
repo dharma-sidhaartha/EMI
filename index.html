@@ -5,261 +5,324 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>EMI Manager - Live Sync</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-:root{
---bg:#0a0a0f;--bg-2:#12121a;--surface:#16161f;--surface-2:#1c1c28;--surface-3:#232333;
---border:rgba(255,255,255,.06);--border-2:rgba(255,255,255,.10);--border-hover:rgba(255,255,255,.18);
---text:#fff;--text-2:#a8a8b3;--text-3:#6e6e7a;
---accent:#6366f1;--accent-2:#818cf8;--accent-bg:rgba(99,102,241,.10);--accent-border:rgba(99,102,241,.25);
---success:#10b981;--success-bg:rgba(16,185,129,.10);--success-border:rgba(16,185,129,.25);
---warning:#f59e0b;--warning-bg:rgba(245,158,11,.10);--warning-border:rgba(245,158,11,.25);
---danger:#ef4444;--danger-bg:rgba(239,68,68,.10);--danger-border:rgba(239,68,68,.25);
---info:#06b6d4;--info-bg:rgba(6,182,212,.10);--info-border:rgba(6,182,212,.25);
---pink:#ec4899;--pink-bg:rgba(236,72,153,.10);--pink-border:rgba(236,72,153,.25);
---radius-sm:8px;--radius:12px;--radius-lg:16px;--radius-xl:20px;--radius-2xl:24px;
---shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow:0 4px 16px rgba(0,0,0,.3);--shadow-lg:0 12px 32px rgba(0,0,0,.4);
+:root {
+  --bg: #0a0a0f;
+  --bg-2: #12121a;
+  --surface: #16161f;
+  --surface-2: #1c1c28;
+  --surface-3: #232333;
+  --border: rgba(255,255,255,0.06);
+  --border-2: rgba(255,255,255,0.10);
+  --border-hover: rgba(255,255,255,0.18);
+  
+  --text: #ffffff;
+  --text-2: #a8a8b3;
+  --text-3: #6e6e7a;
+  
+  --accent: #6366f1;
+  --accent-2: #818cf8;
+  --accent-bg: rgba(99,102,241,0.10);
+  --accent-border: rgba(99,102,241,0.25);
+  
+  --success: #10b981;
+  --success-bg: rgba(16,185,129,0.10);
+  --success-border: rgba(16,185,129,0.25);
+  
+  --warning: #f59e0b;
+  --warning-bg: rgba(245,158,11,0.10);
+  --warning-border: rgba(245,158,11,0.25);
+  
+  --danger: #ef4444;
+  --danger-bg: rgba(239,68,68,0.10);
+  --danger-border: rgba(239,68,68,0.25);
+  
+  --info: #06b6d4;
+  --info-bg: rgba(6,182,212,0.10);
+  --info-border: rgba(6,182,212,0.25);
+  
+  --pink: #ec4899;
+  --pink-bg: rgba(236,72,153,0.10);
+  --pink-border: rgba(236,72,153,0.25);
+  
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow: 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+  --ease: 0.22s ease;
 }
 
-body{
-min-height:100vh;font-family:'Plus Jakarta Sans',-apple-system,sans-serif;color:var(--text);
-background:var(--bg);
-background-image:radial-gradient(ellipse 60% 50% at 50% -10%,rgba(99,102,241,.15),transparent),
-radial-gradient(ellipse 50% 40% at 100% 0%,rgba(236,72,153,.10),transparent),
-radial-gradient(ellipse 50% 40% at 0% 50%,rgba(6,182,212,.08),transparent);
-padding:20px;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+body {
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  background-image: 
+    radial-gradient(ellipse 60% 50% at 50% -10%, rgba(99,102,241,0.15), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(236,72,153,0.10), transparent),
+    radial-gradient(ellipse 50% 40% at 0% 50%, rgba(6,182,212,0.08), transparent);
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
 }
 
-button,input,select{font-family:inherit;letter-spacing:inherit}
-.privacy-mode .amt-blur{filter:blur(8px);user-select:none}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 44px 44px; opacity: 0.45;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
 
-/* Auth */
-.auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);padding:20px}
-.auth-overlay.hidden{display:none}
-.auth-card{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-2xl);padding:40px 32px;max-width:420px;width:100%;box-shadow:var(--shadow-lg)}
-.auth-logo{width:56px;height:56px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;box-shadow:0 10px 30px rgba(99,102,241,.3)}
-.auth-card h1{font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:6px}
-.auth-card .subtitle{color:var(--text-2);font-size:.875rem;text-align:center;margin-bottom:28px}
-.auth-tabs{display:flex;background:var(--bg-2);border-radius:var(--radius);padding:4px;margin-bottom:20px;border:1px solid var(--border)}
-.auth-tab{flex:1;padding:10px;border:none;border-radius:var(--radius-sm);background:transparent;color:var(--text-2);font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s}
-.auth-tab.active{background:var(--surface-2);color:var(--text);box-shadow:var(--shadow-sm)}
-.auth-form{display:flex;flex-direction:column;gap:12px}
-.auth-input{height:48px;border:1px solid var(--border-2);background:var(--bg-2);color:var(--text);padding:0 16px;border-radius:var(--radius);font-size:.9375rem;font-weight:500;transition:all .2s;outline:none;width:100%}
-.auth-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-.auth-input::placeholder{color:var(--text-3)}
-.auth-btn{height:48px;margin-top:8px;border-radius:var(--radius);background:var(--accent);color:#fff;border:none;font-size:.9375rem;font-weight:600;cursor:pointer;transition:all .2s}
-.auth-btn:hover{background:#5558e3;transform:translateY(-1px);box-shadow:0 8px 20px rgba(99,102,241,.4)}
-.auth-error{color:var(--danger);font-size:.8125rem;margin-top:8px;min-height:16px}
+button, input, select { font-family: inherit; }
+.privacy-mode .amt-blur { filter: blur(8px); user-select: none; }
 
-/* Header */
-.app-header{max-width:1200px;margin:0 auto 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-icon{width:44px;height:44px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 20px rgba(99,102,241,.25)}
-.brand h1{font-size:1.375rem;font-weight:700;letter-spacing:-.02em}
-.brand p{color:var(--text-2);font-size:.8125rem;margin-top:2px}
-.header-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--border-2);color:var(--text-2);font-size:.8125rem;font-weight:600;cursor:pointer;transition:all .2s}
-.chip:hover{border-color:var(--border-hover);color:var(--text)}
-.chip.success{background:var(--success-bg);border-color:var(--success-border);color:var(--success)}
-.chip.warning{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning)}
-.chip.danger{background:var(--danger-bg);border-color:var(--danger-border);color:var(--danger)}
-.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
-.user-chip{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:999px;background:var(--surface);border:1px solid var(--border-2)}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff}
-.user-name{font-size:.8125rem;font-weight:600}
-.signout{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.75rem;font-weight:600;padding:4px 8px;border-radius:var(--radius-sm);transition:all .2s}
-.signout:hover{color:var(--danger);background:var(--danger-bg)}
+/* AUTH OVERLAY */
+.auth-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); padding: 20px; }
+.auth-overlay.hidden { display: none; }
+.auth-card { background: var(--surface); border: 1px solid var(--border-2); border-radius: var(--radius-2xl); padding: 40px 32px; max-width: 420px; width: 100%; box-shadow: var(--shadow-lg); }
+.auth-logo { width: 56px; height: 56px; border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--accent), #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; box-shadow: 0 10px 30px rgba(99,102,241,0.3); }
+.auth-card h1 { font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 6px; }
+.auth-card .subtitle { color: var(--text-2); font-size: 0.875rem; text-align: center; margin-bottom: 28px; }
+.auth-tabs { display: flex; background: var(--bg-2); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
+.auth-tab { flex: 1; padding: 10px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--text-2); font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: var(--ease); }
+.auth-tab.active { background: var(--surface-2); color: var(--text); box-shadow: var(--shadow-sm); }
+.auth-form { display: flex; flex-direction: column; gap: 12px; }
+.auth-input { height: 48px; border: 1px solid var(--border-2); background: var(--bg-2); color: var(--text); padding: 0 16px; border-radius: var(--radius); font-size: 0.9375rem; font-weight: 500; outline: none; transition: var(--ease); }
+.auth-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.auth-btn { height: 48px; margin-top: 8px; border-radius: var(--radius); background: var(--accent); color: white; border: none; font-size: 0.9375rem; font-weight: 600; cursor: pointer; transition: var(--ease); }
+.auth-btn:hover { background: #5558e3; transform: translateY(-1px); }
+.auth-error { color: var(--danger); font-size: 0.8125rem; margin-top: 8px; min-height: 16px; text-align: center; }
 
-/* Layout */
-.app-main{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.app-main.hidden{display:none}
+/* HEADER */
+.app-header { max-width: 1400px; margin: 0 auto 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; position: relative; z-index: 2; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 44px; height: 44px; border-radius: var(--radius); background: linear-gradient(135deg, var(--accent), #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 8px 20px rgba(99,102,241,0.25); }
+.brand h1 { font-size: 1.375rem; font-weight: 700; }
+.brand p { color: var(--text-2); font-size: 0.8125rem; margin-top: 2px; }
+.header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border-2); color: var(--text-2); font-size: 0.8125rem; font-weight: 600; cursor: pointer; transition: var(--ease); }
+.chip:hover { border-color: var(--border-hover); color: var(--text); }
+.chip.success { background: var(--success-bg); border-color: var(--success-border); color: var(--success); }
+.chip.danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+.chip.warning { background: var(--warning-bg); border-color: var(--warning-border); color: var(--warning); }
+.chip-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border-2); }
+.user-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+.user-name { font-size: 0.8125rem; font-weight: 600; }
+.signout { background: none; border: none; color: var(--text-3); cursor: pointer; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: var(--radius-sm); transition: var(--ease); }
+.signout:hover { color: var(--danger); background: var(--danger-bg); }
 
-/* Panel */
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-2xl);overflow:hidden}
-.panel-header{padding:20px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border)}
-.panel-icon{width:40px;height:40px;border-radius:var(--radius);background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:18px}
-.panel-title h2{font-size:1rem;font-weight:700}
-.panel-title p{color:var(--text-2);font-size:.8125rem;margin-top:2px}
-.panel-body{padding:24px}
+/* MAIN LAYOUT: LEFT = LOANS, RIGHT = TRACKER & DASHBOARD */
+.app-main {
+  max-width: 1400px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  align-items: start;
+  gap: 20px;
+  position: relative; z-index: 2;
+}
+.app-main.hidden { display: none; }
+.left-col { display: flex; flex-direction: column; gap: 20px; }
+.right-col { display: flex; flex-direction: column; gap: 20px; }
 
-/* Form */
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.form-group{display:flex;flex-direction:column;gap:6px}
-.form-group.full{grid-column:1/-1}
-label{font-size:.75rem;color:var(--text-2);font-weight:600}
-.input-wrap{position:relative}
-.affix{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-weight:600;font-size:.875rem;pointer-events:none}
-.affix.right{left:auto;right:14px}
-input,select{width:100%;height:44px;border:1px solid var(--border-2);background:var(--bg-2);color:var(--text);padding:0 14px;border-radius:var(--radius);font-size:.9375rem;font-weight:500;outline:none;transition:all .15s}
-input.with-prefix{padding-left:32px}input.with-suffix{padding-right:32px}
-input:hover,select:hover{border-color:var(--border-hover)}
-input:focus,select:focus{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px var(--accent-bg)}
-input::placeholder{color:var(--text-3)}
-select{appearance:none;cursor:pointer}
+/* PANELS */
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-2xl); overflow: hidden; }
+.panel-header { padding: 20px 24px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); }
+.panel-icon { width: 40px; height: 40px; border-radius: var(--radius); background: var(--accent-bg); border: 1px solid var(--accent-border); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.panel-title h2 { font-size: 1rem; font-weight: 700; }
+.panel-title p { color: var(--text-2); font-size: 0.8125rem; margin-top: 2px; }
+.panel-body { padding: 24px; }
 
-.seg-control{display:grid;grid-template-columns:1fr 1fr;background:var(--bg-2);border:1px solid var(--border);padding:4px;border-radius:var(--radius);gap:4px}
-.seg-btn{border:none;background:transparent;color:var(--text-2);padding:9px;border-radius:var(--radius-sm);cursor:pointer;font-size:.8125rem;font-weight:600;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
-.seg-btn:hover{color:var(--text)}
-.seg-btn.active{background:var(--surface-2);color:var(--text);box-shadow:var(--shadow-sm)}
-.seg-btn.active.bank{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff}
-.seg-btn.active.hand{background:linear-gradient(135deg,var(--pink),#f43f5e);color:#fff}
-.hint{display:none;margin-top:12px;padding:10px 14px;border-radius:var(--radius);background:var(--info-bg);border:1px solid var(--info-border);border-left:3px solid var(--info);color:var(--info);font-size:.8125rem;font-weight:500}
-.hint.show{display:block}
+/* FORMS */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 0.75rem; color: var(--text-2); font-weight: 600; }
+.input-wrap { position: relative; }
+.affix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-weight: 600; font-size: 0.875rem; pointer-events: none; }
+input, select { width: 100%; height: 44px; border: 1px solid var(--border-2); background: var(--bg-2); color: var(--text); padding: 0 14px; border-radius: var(--radius); font-size: 0.9375rem; outline: none; transition: var(--ease); }
+input.with-prefix { padding-left: 32px; }
+input:hover, select:hover { border-color: var(--border-hover); }
+input:focus, select:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px var(--accent-bg); }
+.seg-control { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg-2); border: 1px solid var(--border); padding: 4px; border-radius: var(--radius); gap: 4px; }
+.seg-btn { border: none; background: transparent; color: var(--text-2); padding: 9px; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.8125rem; font-weight: 600; transition: var(--ease); }
+.seg-btn:hover { color: var(--text); }
+.seg-btn.active { background: var(--surface-2); color: var(--text); box-shadow: var(--shadow-sm); }
+.seg-btn.active.bank { background: linear-gradient(135deg, var(--accent), #8b5cf6); color: white; }
+.seg-btn.active.hand { background: linear-gradient(135deg, var(--pink), #f43f5e); color: white; }
+.hint { display: none; margin-top: 12px; padding: 10px 14px; border-radius: var(--radius); background: var(--info-bg); border: 1px solid var(--info-border); border-left: 3px solid var(--info); color: var(--info); font-size: 0.8125rem; font-weight: 500; }
+.hint.show { display: block; }
+.actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.btn { border: none; padding: 10px 18px; border-radius: var(--radius); cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: var(--ease); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-ghost { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-2); }
+.btn-edit { background: var(--accent-bg); color: var(--accent-2); border: 1px solid var(--accent-border); padding: 6px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); }
+.btn-delete { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); padding: 6px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); }
 
-.actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.btn{border:none;padding:10px 18px;border-radius:var(--radius);cursor:pointer;font-size:.875rem;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.btn:hover{transform:translateY(-1px)}
-.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(99,102,241,.25)}
-.btn-primary:hover{background:#5558e3;box-shadow:0 8px 20px rgba(99,102,241,.35)}
-.btn-success{background:var(--success);color:#fff;box-shadow:0 4px 12px rgba(16,185,129,.25)}
-.btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border-2)}
-.btn-ghost:hover{background:var(--surface-3);border-color:var(--border-hover)}
-.btn-icon{padding:6px 10px;font-size:.75rem;border-radius:var(--radius-sm)}
-.btn-edit{background:var(--accent-bg);color:var(--accent-2);border:1px solid var(--accent-border)}
-.btn-edit:hover{background:rgba(99,102,241,.2)}
-.btn-delete{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border)}
-.btn-delete:hover{background:rgba(239,68,68,.2)}
+/* LOANS LIST (LEFT PANEL) */
+.loans-bar { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.loans-bar h3 { font-size: 0.875rem; font-weight: 700; }
+.loans-bar h3 .count { display: inline-block; background: var(--accent-bg); color: var(--accent-2); padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; margin-left: 6px; }
+.loans-grid { display: flex; flex-direction: column; gap: 12px; max-height: 500px; overflow-y: auto; padding-right: 4px; }
+.loans-grid::-webkit-scrollbar { width: 6px; }
+.loans-grid::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 10px; }
+.loan-card { position: relative; padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface-2); transition: var(--ease); }
+.loan-card:hover { background: var(--surface-3); border-color: var(--border-hover); }
+.loan-card::before { content: ''; position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px; background: var(--loan-color); border-radius: 0 3px 3px 0; }
+.loan-card.editing { border-color: var(--warning-border); background: var(--warning-bg); }
+.loan-card.editing::before { background: var(--warning); }
+.loan-card-top { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.loan-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.loan-title { font-weight: 700; font-size: 0.9375rem; }
+.loan-tag { font-size: 0.6875rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.loan-tag.bank { background: var(--accent-bg); color: var(--accent-2); }
+.loan-tag.hand { background: var(--pink-bg); color: var(--pink); }
+.loan-meta { color: var(--text-2); font-size: 0.75rem; }
+.loan-card-actions { display: flex; gap: 6px; }
+.loan-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; background: var(--bg-2); border-radius: var(--radius); border: 1px solid var(--border); }
+.loan-stat-label { color: var(--text-3); font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; }
+.loan-stat-value { font-size: 0.875rem; font-weight: 700; margin-top: 2px; }
+.empty-state { padding: 40px 20px; text-align: center; border: 1px dashed var(--border-2); border-radius: var(--radius-lg); background: var(--bg-2); color: var(--text-3); }
+.empty-state .icon { font-size: 28px; margin-bottom: 10px; opacity: 0.5; }
 
-/* Loans */
-.loans-bar{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.loans-bar h3{font-size:.875rem;font-weight:700}
-.loans-bar h3 .count{display:inline-block;background:var(--accent-bg);color:var(--accent-2);padding:2px 8px;border-radius:999px;font-size:.75rem;margin-left:6px}
+/* MONTH TRACKER (RIGHT TOP) */
+.month-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.month-nav-btn { width: 40px; height: 40px; border: 1px solid var(--border-2); background: var(--surface-2); color: var(--text); border-radius: var(--radius); font-size: 18px; cursor: pointer; transition: var(--ease); }
+.month-nav-btn:hover { background: var(--surface-3); border-color: var(--border-hover); }
+.month-center { text-align: center; }
+.month-display { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #ffffff, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.month-pills { margin-top: 8px; display: flex; gap: 6px; justify-content: center; }
+.month-pill { padding: 4px 12px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2); font-size: 0.6875rem; font-weight: 600; cursor: pointer; transition: var(--ease); }
+.month-pill:hover { color: var(--text); border-color: var(--border-hover); }
 
-.loans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-.loan-card{position:relative;padding:18px;border-radius:var(--radius-lg);border:1px solid var(--border-2);background:var(--surface-2);transition:all .2s}
-.loan-card:hover{background:var(--surface-3);border-color:var(--border-hover);transform:translateY(-2px)}
-.loan-card::before{content:'';position:absolute;left:0;top:20px;bottom:20px;width:3px;background:var(--loan-color);border-radius:0 3px 3px 0}
-.loan-card.editing{border-color:var(--warning-border);background:var(--warning-bg)}
-.loan-card.editing::before{background:var(--warning)}
-.loan-card-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}
-.loan-info{flex:1;min-width:0}
-.loan-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
-.loan-title{font-weight:700;font-size:.9375rem}
-.loan-tag{font-size:.6875rem;font-weight:700;padding:2px 8px;border-radius:999px}
-.loan-tag.bank{background:var(--accent-bg);color:var(--accent-2)}.loan-tag.hand{background:var(--pink-bg);color:var(--pink)}
-.loan-meta{color:var(--text-2);font-size:.75rem;font-weight:500}
-.loan-card-actions{display:flex;gap:6px;flex-shrink:0}
-.loan-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:14px;background:var(--bg-2);border-radius:var(--radius);border:1px solid var(--border)}
-.loan-stat-label{color:var(--text-3);font-size:.6875rem;font-weight:600;text-transform:uppercase}
-.loan-stat-value{font-size:.875rem;font-weight:700;margin-top:2px}
+.month-summary { background: linear-gradient(135deg, var(--accent-bg), var(--info-bg)); border: 1px solid var(--accent-border); border-radius: var(--radius-xl); padding: 20px; margin-bottom: 20px; }
+.summary-row { display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px; }
+.summary-row h3 { font-size: 0.9375rem; font-weight: 600; color: var(--text-2); }
+.summary-amt { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-2), var(--info)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; text-align: right; }
+.summary-amt-label { color: var(--text-3); font-size: 0.6875rem; font-weight: 600; margin-top: 6px; text-transform: uppercase; text-align: right; }
 
-.empty-state{padding:48px 24px;text-align:center;border:1px dashed var(--border-2);border-radius:var(--radius-lg);background:var(--bg-2)}
-.empty-state .icon{font-size:32px;margin-bottom:10px;opacity:.5}
-.empty-state p{color:var(--text-2);font-size:.875rem}
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat-box { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
+.stat-num { font-size: 1.25rem; font-weight: 700; }
+.stat-label { font-size: 0.6875rem; color: var(--text-2); font-weight: 600; margin-top: 2px; }
+.stat-box.total .stat-num { color: var(--info); }
+.stat-box.paid .stat-num { color: var(--success); }
+.stat-box.unpaid .stat-num { color: var(--warning); }
+.stat-box.overdue .stat-num { color: var(--danger); }
 
-/* Month Tracker */
-.month-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.month-nav-btn{width:40px;height:40px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text);border-radius:var(--radius);font-size:18px;cursor:pointer;transition:all .15s}
-.month-nav-btn:hover{background:var(--surface-3);border-color:var(--border-hover)}
-.month-center{text-align:center}
-.month-display{font-size:1.5rem;font-weight:700;letter-spacing:-.03em}
-.month-pills{margin-top:8px;display:flex;gap:6px;justify-content:center}
-.month-pill{padding:4px 12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);font-size:.6875rem;font-weight:600;cursor:pointer;transition:all .15s}
-.month-pill:hover{color:var(--text);border-color:var(--border-hover)}
+.progress-section { margin-top: 16px; }
+.progress-info { display: flex; justify-content: space-between; color: var(--text-2); font-size: 0.8125rem; font-weight: 500; margin-bottom: 8px; }
+.progress-bar { height: 6px; background: rgba(0,0,0,0.3); border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--success), var(--info)); border-radius: 999px; transition: width 0.4s ease; }
 
-.month-summary{background:linear-gradient(135deg,var(--accent-bg),var(--info-bg));border:1px solid var(--accent-border);border-radius:var(--radius-xl);padding:24px;margin-bottom:20px}
-.summary-row{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:20px}
-.summary-row h3{font-size:.9375rem;font-weight:600;color:var(--text-2)}
-.summary-total{text-align:right}
-.summary-amt{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent-2),var(--info));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.03em;line-height:1}
-.summary-amt-label{color:var(--text-3);font-size:.6875rem;font-weight:600;margin-top:6px;text-transform:uppercase}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.stat-box{background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
-.stat-num{font-size:1.25rem;font-weight:700}
-.stat-label{font-size:.6875rem;color:var(--text-2);font-weight:600;margin-top:2px}
-.stat-box.total .stat-num{color:var(--info)}.stat-box.paid .stat-num{color:var(--success)}.stat-box.unpaid .stat-num{color:var(--warning)}.stat-box.overdue .stat-num{color:var(--danger)}
-.progress-section{margin-top:20px}
-.progress-info{display:flex;justify-content:space-between;color:var(--text-2);font-size:.8125rem;font-weight:500;margin-bottom:8px}
-.progress-bar{height:6px;background:rgba(0,0,0,.3);border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--info));border-radius:999px;transition:width .4s ease}
+.emi-list { display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto; padding-right: 4px; }
+.emi-list::-webkit-scrollbar { width: 6px; }
+.emi-list::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 10px; }
+.emi-card { display: grid; grid-template-columns: auto 1fr auto auto; gap: 14px; align-items: center; background: var(--surface-2); border: 1px solid var(--border-2); border-radius: var(--radius-lg); padding: 14px; position: relative; }
+.emi-card.paid { opacity: 0.6; }
+.emi-card.paid::before { content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; background: var(--success); border-radius: 0 3px 3px 0; }
+.emi-card.unpaid::before { content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; background: var(--warning); border-radius: 0 3px 3px 0; }
+.emi-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--loan-color); box-shadow: 0 0 12px var(--loan-color); }
+.emi-name { font-weight: 700; font-size: 0.9375rem; display: flex; align-items: center; gap: 8px; }
+.emi-date { color: var(--text-2); font-size: 0.75rem; margin-top: 3px; }
+.emi-amount { font-size: 1.125rem; font-weight: 700; color: var(--info); text-align: right; }
+.toggle-switch { display: flex; flex-direction: column; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; gap: 2px; }
+.toggle-switch button { border: none; background: transparent; color: var(--text-3); padding: 6px 10px; border-radius: var(--radius-sm); font-size: 0.6875rem; font-weight: 700; cursor: pointer; }
+.toggle-switch button.active.paid-btn { background: var(--success); color: white; }
+.toggle-switch button.active.unpaid-btn { background: var(--warning); color: white; }
 
-.emi-list{display:flex;flex-direction:column;gap:10px}
-.emi-card{display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--radius-lg);padding:16px;transition:all .2s;position:relative}
-.emi-card:hover{background:var(--surface-3);border-color:var(--border-hover)}
-.emi-card.paid{opacity:.7}
-.emi-card.paid::before{content:'';position:absolute;left:0;top:16px;bottom:16px;width:3px;background:var(--success);border-radius:0 3px 3px 0}
-.emi-card.unpaid::before{content:'';position:absolute;left:0;top:16px;bottom:16px;width:3px;background:var(--warning);border-radius:0 3px 3px 0}
-.emi-dot{width:10px;height:10px;border-radius:50%;background:var(--loan-color);box-shadow:0 0 12px var(--loan-color)}
-.emi-info{min-width:0}
-.emi-name{font-weight:700;font-size:.9375rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.emi-date{color:var(--text-2);font-size:.75rem;margin-top:3px;font-weight:500}
-.emi-badge{display:inline-flex;margin-top:6px;padding:3px 8px;border-radius:999px;font-size:.6875rem;font-weight:700}
-.emi-badge.paid{background:var(--success-bg);color:var(--success)}.emi-badge.unpaid{background:var(--warning-bg);color:var(--warning)}
-.emi-amount{font-size:1.125rem;font-weight:700;color:var(--info);text-align:right}
-.toggle-switch{display:flex;background:var(--bg-2);border:1px solid var(--border);border-radius:999px;padding:3px}
-.toggle-switch button{border:none;background:transparent;color:var(--text-3);padding:6px 12px;border-radius:999px;font-size:.6875rem;font-weight:700;cursor:pointer;transition:all .15s}
-.toggle-switch button.active.paid-btn{background:var(--success);color:#fff}
-.toggle-switch button.active.unpaid-btn{background:var(--warning);color:#fff}
+.remaining-card { margin-top: 16px; padding: 16px; border-radius: var(--radius-lg); background: var(--warning-bg); border: 1px solid var(--warning-border); display: flex; justify-content: space-between; align-items: center; }
+.remaining-card.paid { background: var(--success-bg); border-color: var(--success-border); }
+.remaining-title { font-weight: 700; font-size: 0.9375rem; }
+.remaining-sub { color: var(--text-2); font-size: 0.75rem; margin-top: 2px; }
+.remaining-amt { font-size: 1.5rem; font-weight: 700; color: var(--warning); }
+.remaining-card.paid .remaining-amt { color: var(--success); }
 
-.remaining-card{margin-top:16px;padding:18px;border-radius:var(--radius-lg);background:var(--warning-bg);border:1px solid var(--warning-border);display:flex;justify-content:space-between;align-items:center;gap:16px}
-.remaining-card.paid{background:var(--success-bg);border-color:var(--success-border)}
-.remaining-title{font-weight:700;font-size:.9375rem}
-.remaining-sub{color:var(--text-2);font-size:.75rem;margin-top:2px}
-.remaining-amt{font-size:1.5rem;font-weight:700;color:var(--warning)}
-.remaining-card.paid .remaining-amt{color:var(--success)}
+/* DASHBOARD (RIGHT BOTTOM) */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.kpi-card { background: var(--surface-2); border: 1px solid var(--border-2); border-radius: var(--radius-lg); padding: 16px; position: relative; overflow: hidden; }
+.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.kpi-card.purple::before { background: var(--accent); } .kpi-card.cyan::before { background: var(--info); } .kpi-card.amber::before { background: var(--warning); } .kpi-card.pink::before { background: var(--pink); }
+.kpi-label { color: var(--text-2); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+.kpi-value { font-size: 1.3rem; font-weight: 700; margin-top: 6px; }
+.kpi-card.purple .kpi-value { color: var(--accent-2); } .kpi-card.cyan .kpi-value { color: var(--info); } .kpi-card.amber .kpi-value { color: var(--warning); } .kpi-card.pink .kpi-value { color: var(--pink); }
 
-/* Dashboard */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.kpi-card{background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--radius-lg);padding:18px;position:relative;overflow:hidden}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.kpi-card.purple::before{background:linear-gradient(90deg,var(--accent),#8b5cf6)}
-.kpi-card.cyan::before{background:linear-gradient(90deg,var(--info),#0ea5e9)}
-.kpi-card.amber::before{background:linear-gradient(90deg,var(--warning),#f97316)}
-.kpi-card.pink::before{background:linear-gradient(90deg,var(--pink),#e11d48)}
-.kpi-label{color:var(--text-2);font-size:.75rem;font-weight:600;text-transform:uppercase}
-.kpi-value{font-size:1.5rem;font-weight:700;margin-top:8px;letter-spacing:-.03em}
-.kpi-card.purple .kpi-value{color:var(--accent-2)}.kpi-card.cyan .kpi-value{color:var(--info)}.kpi-card.amber .kpi-value{color:var(--warning)}.kpi-card.pink .kpi-value{color:var(--pink)}
+.tab-nav { display: flex; gap: 4px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; margin-bottom: 16px; }
+.tab-btn { flex: 1; border: none; background: transparent; color: var(--text-2); padding: 8px; border-radius: var(--radius-sm); font-size: 0.8125rem; font-weight: 600; cursor: pointer; transition: var(--ease); }
+.tab-btn.active { background: var(--surface-2); color: var(--text); box-shadow: var(--shadow-sm); }
 
-.tab-nav{display:flex;gap:4px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:20px}
-.tab-btn{flex:1;border:none;background:transparent;color:var(--text-2);padding:10px;border-radius:var(--radius-sm);font-size:.8125rem;font-weight:600;cursor:pointer;transition:all .15s}
-.tab-btn:hover{color:var(--text)}.tab-btn.active{background:var(--surface-2);color:var(--text);box-shadow:var(--shadow-sm)}
-
-.table-wrap{border:1px solid var(--border);border-radius:var(--radius-lg);overflow-x:auto;background:var(--surface-2)}
-table{width:100%;border-collapse:collapse;min-width:700px}
-th{text-align:left;padding:14px 16px;font-size:.75rem;color:var(--text-2);font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase}
-td{padding:14px 16px;font-size:.875rem;font-weight:500;border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
-.loan-cell{display:flex;align-items:center;gap:10px;font-weight:600}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--loan-color);display:inline-block}
-.total-row{background:var(--accent-bg);font-weight:700}
-.total-row td{border-bottom:none}
+.table-wrap { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow-x: auto; background: var(--surface-2); }
+table { width: 100%; border-collapse: collapse; min-width: 600px; }
+th { text-align: left; padding: 12px 14px; font-size: 0.7rem; color: var(--text-2); font-weight: 600; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+td { padding: 12px 14px; font-size: 0.8125rem; font-weight: 500; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+.loan-cell { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.total-row { background: var(--accent-bg); font-weight: 700; }
+.total-row td { border-bottom: none; }
 
 /* Upcoming */
-.upcoming-month{background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--radius-lg);padding:20px;margin-bottom:12px}
-.upcoming-month-header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--border)}
-.upcoming-left{display:flex;align-items:center;gap:12px}
-.upcoming-badge{width:48px;height:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;box-shadow:0 6px 16px rgba(99,102,241,.3)}
-.upcoming-badge .m{font-size:.6875rem;font-weight:800}.upcoming-badge .y{font-size:.75rem;font-weight:800;margin-top:2px}
-.upcoming-month-title h4{font-size:1rem;font-weight:700}.upcoming-month-title p{color:var(--text-2);font-size:.75rem;margin-top:2px;font-weight:500}
-.upcoming-total .amt{font-size:1.5rem;font-weight:700;color:var(--info)}.upcoming-total .lbl{color:var(--text-3);font-size:.6875rem;font-weight:600;text-transform:uppercase;text-align:right;margin-top:2px}
-.upcoming-list{display:flex;flex-direction:column;gap:8px}
-.upcoming-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:12px 14px;background:var(--bg-2);border-radius:var(--radius);border-left:3px solid var(--loan-color)}
-.upcoming-name{font-weight:600;font-size:.875rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.upcoming-date{color:var(--text-2);font-size:.75rem;margin-top:2px}
-.upcoming-amt{font-weight:700;color:var(--info);font-size:.9375rem}
-.upcoming-days{font-size:.6875rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--info-bg);color:var(--info);white-space:nowrap}
-.upcoming-days.today{background:var(--warning-bg);color:var(--warning)}.upcoming-days.soon{background:var(--success-bg);color:var(--success)}.upcoming-days.overdue{background:var(--danger-bg);color:var(--danger)}
+.upcoming-month { background: var(--surface-2); border: 1px solid var(--border-2); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; }
+.upcoming-month-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+.upcoming-left { display: flex; align-items: center; gap: 10px; }
+.upcoming-badge { width: 40px; height: 40px; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--accent), #8b5cf6); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.upcoming-badge .m { font-size: 0.65rem; font-weight: 800; } .upcoming-badge .y { font-size: 0.7rem; font-weight: 800; margin-top: 2px; }
+.upcoming-month-title h4 { font-size: 0.9375rem; font-weight: 700; } .upcoming-month-title p { color: var(--text-2); font-size: 0.75rem; margin-top: 2px; }
+.upcoming-total { text-align: right; }
+.upcoming-total .amt { font-size: 1.25rem; font-weight: 700; color: var(--info); }
+.upcoming-list { display: flex; flex-direction: column; gap: 6px; }
+.upcoming-row { display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; align-items: center; padding: 10px 12px; background: var(--bg-2); border-radius: var(--radius-sm); border-left: 3px solid var(--loan-color); }
+.upcoming-name { font-weight: 600; font-size: 0.8125rem; display: flex; align-items: center; gap: 8px; }
+.upcoming-date { color: var(--text-2); font-size: 0.7rem; margin-top: 2px; }
+.upcoming-amt { font-weight: 700; color: var(--info); font-size: 0.875rem; }
+.upcoming-days { font-size: 0.6875rem; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--info-bg); color: var(--info); }
+.upcoming-days.today { background: var(--warning-bg); color: var(--warning); }
+.upcoming-days.soon { background: var(--success-bg); color: var(--success); }
+.upcoming-days.overdue { background: var(--danger-bg); color: var(--danger); }
 
 /* Schedule */
-.sch-month{background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;cursor:pointer;transition:all .15s}
-.sch-month:hover{background:var(--surface-3);border-color:var(--border-hover)}
-.sch-head{display:flex;justify-content:space-between;align-items:center}
-.sch-title-area{display:flex;align-items:center;gap:12px}
-.sch-badge{width:44px;height:44px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8125rem}
-.sch-title h4{font-size:.9375rem;font-weight:700}.sch-title p{color:var(--text-2);font-size:.75rem;margin-top:2px}
-.sch-total{color:var(--info);font-size:1.125rem;font-weight:700}
-.sch-breakdown{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);flex-direction:column;gap:6px}
-.sch-breakdown.show{display:flex}
-.sch-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;background:var(--bg-2);border-radius:var(--radius-sm);font-size:.8125rem}
+.sch-month { background: var(--surface-2); border: 1px solid var(--border-2); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 10px; cursor: pointer; }
+.sch-head { display: flex; justify-content: space-between; align-items: center; }
+.sch-title-area { display: flex; align-items: center; gap: 10px; }
+.sch-badge { width: 36px; height: 36px; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--accent), #8b5cf6); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; }
+.sch-title h4 { font-size: 0.875rem; font-weight: 700; } .sch-title p { color: var(--text-2); font-size: 0.7rem; margin-top: 2px; }
+.sch-total { color: var(--info); font-size: 1rem; font-weight: 700; }
+.sch-breakdown { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); flex-direction: column; gap: 6px; }
+.sch-breakdown.show { display: flex; }
+.sch-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-2); border-radius: var(--radius-sm); font-size: 0.75rem; }
 
 /* Responsive */
-@media(max-width:900px){.form-grid,.kpi-grid{grid-template-columns:1fr 1fr}.loan-stats{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){body{padding:16px}.app-header{flex-direction:column;align-items:stretch}.header-actions{justify-content:space-between}.form-grid,.loans-grid,.kpi-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}.emi-card{grid-template-columns:auto 1fr;gap:12px}.emi-amount,.toggle-switch{grid-column:2}.summary-row{flex-direction:column;align-items:stretch}.summary-total{text-align:left}.upcoming-month-header{flex-direction:column;align-items:stretch}.upcoming-total .lbl{text-align:left}.panel-body{padding:18px}.panel-header{padding:18px}.month-display{font-size:1.25rem}}
-@media(max-width:480px){.loan-card-top{flex-direction:column}.loan-card-actions{width:100%}.loan-card-actions .btn{flex:1}.loan-stats{grid-template-columns:1fr 1fr}.auth-card{padding:32px 24px}}
+@media(max-width: 1100px) {
+  .app-main { grid-template-columns: 1fr; }
+  .left-col, .right-col { display: contents; } /* Unwrap columns to flow naturally */
+  .app-main > .panel { grid-column: 1 / -1; }
+  .loan-stats { grid-template-columns: repeat(4, 1fr); }
+  .toggle-switch { flex-direction: row; }
+}
+@media(max-width: 700px) {
+  body { padding: 16px; }
+  .app-header { flex-direction: column; align-items: stretch; }
+  .header-actions { justify-content: space-between; }
+  .form-grid, .kpi-grid, .stats-row { grid-template-columns: 1fr 1fr; }
+  .loan-stats { grid-template-columns: 1fr 1fr; }
+  .emi-card { grid-template-columns: auto 1fr; }
+  .emi-amount, .toggle-switch { grid-column: 2; justify-self: start; }
+  .summary-row, .upcoming-month-header { flex-direction: column; align-items: flex-start; }
+  .summary-total, .upcoming-total { text-align: left; }
+}
+@media(max-width: 480px) {
+  .form-grid, .kpi-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -280,7 +343,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="auth-btn" onclick="loginUser()">Login</button>
       <div class="auth-error" id="loginError"></div>
     </div>
-    <div id="form-signup" class="auth-form" style="display:none">
+    <div id="form-signup" class="auth-form" style="display:none;">
       <input type="text" id="signupUser" class="auth-input" placeholder="Choose a username" />
       <input type="password" id="signupPass" class="auth-input" placeholder="Create a password (min 6)" />
       <button class="auth-btn" onclick="signupUser()">Create Account</button>
@@ -293,11 +356,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <header class="app-header">
   <div class="brand">
     <div class="brand-icon">💎</div>
-    <div><h1>EMI Manager</h1><p>Loans · Live sync</p></div>
+    <div>
+      <h1>EMI Manager</h1>
+      <p>Loans · Live sync</p>
+    </div>
   </div>
   <div class="header-actions">
-    <div class="chip success" id="syncStatus"><span class="chip-dot"></span><span>Synced</span></div>
-    <button class="chip" onclick="togglePrivacy()"><span id="privacyIcon">👁️</span><span>Privacy</span></button>
+    <div class="chip success" id="syncStatus">
+      <span class="chip-dot"></span>
+      <span>Synced</span>
+    </div>
+    <button class="chip" onclick="togglePrivacy()">
+      <span id="privacyIcon">👁️</span>
+      <span>Privacy</span>
+    </button>
     <div class="user-chip" id="userInfo" style="display:none">
       <div class="user-avatar" id="userAvatar">U</div>
       <span class="user-name" id="userName">User</span>
@@ -306,43 +378,80 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </header>
 
-<!-- MAIN -->
+<!-- MAIN APP (LEFT & RIGHT COLUMNS) -->
 <main class="app-main hidden" id="appMain">
-  <section class="panel">
-    <div class="panel-header"><div class="panel-icon">🏦</div><div class="panel-title"><h2>Add Loan</h2><p id="formSubtitle">Enter loan details</p></div></div>
-    <div class="panel-body">
-      <div class="form-grid">
-        <div class="form-group full"><label>Loan Type</label><div class="seg-control"><button class="seg-btn bank active" data-type="bank" onclick="setLoanType('bank')">🏦 Bank Loan</button><button class="seg-btn hand" data-type="hand" onclick="setLoanType('hand')">🤝 Hand Loan</button></div></div>
-        <div class="form-group full"><label>Loan Name</label><input id="loanName" placeholder="e.g. Home Loan" /></div>
-        <div class="form-group full"><label>Principal</label><div class="input-wrap"><span class="affix">₹</span><input id="principal" class="with-prefix" placeholder="25,00,000" /></div></div>
-        <div class="form-group"><label>Monthly EMI</label><div class="input-wrap"><span class="affix">₹</span><input id="emiAmount" class="with-prefix" placeholder="22,500" /></div></div>
-        <div class="form-group" id="interestGroup"><label>Monthly Interest</label><div class="input-wrap"><span class="affix">₹</span><input id="interestAmount" class="with-prefix" placeholder="0" /></div></div>
-        <div class="form-group"><label>Due Day</label><input id="dueDay" type="number" min="1" max="28" value="5" /></div>
-        <div class="form-group"><label>Start Date</label><input id="startDate" type="date" /></div>
-        <div class="form-group full"><label>Repayment Mode</label><div class="seg-control"><button class="seg-btn active" data-mode="tenure" onclick="setMode('tenure')">📆 By Tenure</button><button class="seg-btn" data-mode="enddate" onclick="setMode('enddate')">📅 By End Date</button></div></div>
-        <div class="form-group" id="tenureGroup"><label>Tenure</label><div style="display:grid;grid-template-columns:1.4fr 1fr;gap:8px"><input id="tenureValue" type="number" placeholder="20" /><select id="tenureUnit"><option value="years">Years</option><option value="months">Months</option></select></div></div>
-        <div class="form-group" id="endDateGroup" style="display:none"><label>End Date</label><input id="endDate" type="date" /></div>
-      </div>
-      <div class="hint" id="modeHint">End Date mode calculates exact EMI count automatically.</div>
-      <div class="actions">
-        <button class="btn btn-primary" id="submitBtn" onclick="submitLoan()">+ Add Loan</button>
-        <button class="btn btn-ghost" id="cancelBtn" onclick="cancelEdit()" style="display:none">Cancel</button>
-        <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
-      </div>
-      <div class="loans-bar"><h3>Your Loans <span class="count" id="loanCount">0</span></h3></div>
-      <div id="loanList" class="loans-grid"><div class="empty-state"><div class="icon">📋</div><p>No loans added yet</p></div></div>
-    </div>
-  </section>
 
-  <section class="panel">
-    <div class="panel-header"><div class="panel-icon">🗓️</div><div class="panel-title"><h2>Monthly Tracker</h2><p>Mark each EMI as paid or unpaid</p></div></div>
-    <div class="panel-body" id="monthlyContent"></div>
-  </section>
+  <!-- LEFT COLUMN (Loans Panel) -->
+  <div class="left-col">
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🏦</div>
+        <div class="panel-title">
+          <h2>Loans</h2>
+          <p id="formSubtitle">Enter loan details</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Loan Type</label>
+            <div class="seg-control">
+              <button class="seg-btn bank active" data-type="bank" onclick="setLoanType('bank')">🏦 Bank Loan</button>
+              <button class="seg-btn hand" data-type="hand" onclick="setLoanType('hand')">🤝 Hand Loan</button>
+            </div>
+          </div>
+          <div class="form-group full"><label>Loan Name</label><input id="loanName" placeholder="e.g. Home Loan" /></div>
+          <div class="form-group"><label>Principal</label><div class="input-wrap"><span class="affix">₹</span><input id="principal" class="with-prefix" placeholder="25,00,000" /></div></div>
+          <div class="form-group"><label>Monthly EMI</label><div class="input-wrap"><span class="affix">₹</span><input id="emiAmount" class="with-prefix" placeholder="22,500" /></div></div>
+          <div class="form-group" id="interestGroup"><label>Monthly Interest</label><div class="input-wrap"><span class="affix">₹</span><input id="interestAmount" class="with-prefix" placeholder="0" /></div></div>
+          <div class="form-group"><label>Due Day</label><input id="dueDay" type="number" min="1" max="28" value="5" /></div>
+          <div class="form-group"><label>Start Date</label><input id="startDate" type="date" /></div>
+          <div class="form-group full">
+            <label>Repayment Mode</label>
+            <div class="seg-control">
+              <button class="seg-btn active" data-mode="tenure" onclick="setMode('tenure')">📆 By Tenure</button>
+              <button class="seg-btn" data-mode="enddate" onclick="setMode('enddate')">📅 By End Date</button>
+            </div>
+          </div>
+          <div class="form-group" id="tenureGroup"><label>Tenure</label><div style="display:grid;grid-template-columns:1.4fr 1fr;gap:8px"><input id="tenureValue" type="number" placeholder="20" /><select id="tenureUnit"><option value="years">Years</option><option value="months">Months</option></select></div></div>
+          <div class="form-group" id="endDateGroup" style="display:none"><label>End Date</label><input id="endDate" type="date" /></div>
+        </div>
+        <div class="hint" id="modeHint">End Date mode calculates exact EMI count automatically.</div>
+        <div class="actions">
+          <button class="btn btn-primary" id="submitBtn" onclick="submitLoan()">+ Add Loan</button>
+          <button class="btn btn-ghost" id="cancelBtn" onclick="cancelEdit()" style="display:none">Cancel</button>
+          <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
+        </div>
 
-  <section class="panel">
-    <div class="panel-header"><div class="panel-icon">📊</div><div class="panel-title"><h2>Dashboard</h2><p>Overview, schedules, upcoming dues</p></div></div>
-    <div class="panel-body" id="dashboardContent"></div>
-  </section>
+        <div class="loans-bar">
+          <h3>Your Loans <span class="count" id="loanCount">0</span></h3>
+        </div>
+        <div id="loanList" class="loans-grid">
+          <div class="empty-state"><div class="icon">📋</div><p>No loans added yet</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- RIGHT COLUMN (Tracker + Dashboard) -->
+  <div class="right-col">
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🗓️</div>
+        <div class="panel-title"><h2>Monthly Tracker</h2><p>Mark each EMI as paid or unpaid</p></div>
+      </div>
+      <div class="panel-body" id="monthlyContent"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">📊</div>
+        <div class="panel-title"><h2>Dashboard</h2><p>Overview, schedules, upcoming dues</p></div>
+      </div>
+      <div class="panel-body" id="dashboardContent"></div>
+    </section>
+  </div>
+
 </main>
 
 <!-- Firebase SDKs -->
@@ -355,7 +464,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 // 🔥 FIREBASE CONFIG — REPLACE WITH YOUR VALUES
 // ============================================================
 const firebaseConfig = {
- apiKey: "AIzaSyDPeEHhFhFZsl8JSuQ9VHsLi32Njt91R1o",
+  apiKey: "AIzaSyDPeEHhFhFZsl8JSuQ9VHsLi32Njt91R1o",
   authDomain: "emi-manager-4caff.firebaseapp.com",
   databaseURL: "https://emi-manager-4caff-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "emi-manager-4caff",
@@ -377,7 +486,6 @@ const today=new Date(); today.setHours(0,0,0,0);
 document.getElementById("startDate").value = toInputDate(new Date());
 document.getElementById("endDate").value = toInputDate(new Date(today.getFullYear()+10, today.getMonth(), today.getDate()));
 
-// Helpers
 function toInputDate(d){ const x=new Date(d); return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`; }
 function parseDate(v){ if(v instanceof Date) return v; const p=String(v).split("-"); return p.length>=3 ? new Date(+p[0],+p[1]-1,+p[2]) : new Date(v); }
 function formatINR(n){ if(isNaN(n)) return "0"; let a=Math.round(Math.abs(n)); let s=a.toString(); let l=s.substring(s.length-3); let r=s.substring(0,s.length-3); return (n<0?"-":"") + (r?r.replace(/\B(?=(\d{2})+(?!\d))/g,",")+","+l:l); }
@@ -397,7 +505,6 @@ function switchTabAuth(tab) {
   document.getElementById('loginError').textContent = '';
   document.getElementById('signupError').textContent = '';
 }
-
 function signupUser() {
   const user = document.getElementById('signupUser').value.trim();
   const pass = document.getElementById('signupPass').value;
@@ -409,7 +516,6 @@ function signupUser() {
     .then(cred => cred.user.updateProfile({ displayName: user }))
     .catch(err => document.getElementById('signupError').textContent = err.message.replace("Firebase: ",""));
 }
-
 function loginUser() {
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value;
@@ -419,13 +525,11 @@ function loginUser() {
   auth.signInWithEmailAndPassword(email, pass)
     .catch(err => document.getElementById('loginError').textContent = err.message.replace("Firebase: ",""));
 }
-
 function signOutUser() { if(confirm("Logout?")) auth.signOut(); }
 
 auth.onAuthStateChanged(user => {
   if (user) {
-    currentUser = user;
-    dbRef = db.ref("users/" + user.uid);
+    currentUser = user; dbRef = db.ref("users/" + user.uid);
     document.getElementById("authOverlay").classList.add("hidden");
     document.getElementById("appMain").classList.remove("hidden");
     document.getElementById("userInfo").style.display = "flex";
@@ -452,7 +556,6 @@ function setSync(status) {
   el.className = "chip " + (status==="saving"?"warning":status==="offline"?"danger":"success");
   el.querySelector('span:last-child').textContent = status==="saving"?"Saving":status==="offline"?"Offline":"Synced";
 }
-
 function saveToCloud() {
   if (!dbRef) return;
   isSaving = true; setSync('saving');
@@ -463,7 +566,6 @@ function saveToCloud() {
   }).then(() => { setSync('synced'); isSaving=false; })
     .catch(e => { console.error(e); setSync('offline'); isSaving=false; });
 }
-
 function listenForData() {
   if(!dbRef) return;
   setSync('saving');
@@ -474,8 +576,7 @@ function listenForData() {
       loans = (data.loans || []).map(l => ({...l, startDate: parseDate(l.startDate), endDate: parseDate(l.endDate)}));
       paymentStatus = data.paymentStatus || {};
     } else { loans = []; paymentStatus = {}; }
-    renderLoans(); buildResults();
-    renderMonthlyTracker(); renderDashboard();
+    renderLoans(); buildResults(); renderMonthlyTracker(); renderDashboard();
     setSync('synced');
   }, () => setSync('offline'));
 }
@@ -485,14 +586,12 @@ function togglePrivacy() {
   document.body.classList.toggle("privacy-mode");
   document.getElementById("privacyIcon").textContent = document.body.classList.contains("privacy-mode") ? "🙈" : "👁️";
 }
-
 function setLoanType(t) {
   currentLoanType=t;
   document.querySelectorAll(".seg-btn[data-type]").forEach(b=>b.classList.toggle("active",b.dataset.type===t));
   document.getElementById("interestGroup").style.display=t==="hand"?"none":"flex";
   if(t==="hand") document.getElementById("interestAmount").value="0";
 }
-
 function setMode(m) {
   currentMode=m;
   document.querySelectorAll(".seg-btn[data-mode]").forEach(b=>b.classList.toggle("active",b.dataset.mode===m));
@@ -500,129 +599,66 @@ function setMode(m) {
   document.getElementById("endDateGroup").style.display=m==="enddate"?"flex":"none";
   document.getElementById("modeHint").classList.toggle("show",m==="enddate");
 }
-
 function clearForm() {
   editingLoanId=null;
   ["loanName","principal","emiAmount","interestAmount","tenureValue"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("dueDay").value="5";
-  document.getElementById("tenureUnit").value="years";
+  document.getElementById("dueDay").value="5"; document.getElementById("tenureUnit").value="years";
   document.getElementById("startDate").value=toInputDate(new Date());
   document.getElementById("endDate").value=toInputDate(new Date(today.getFullYear()+10,today.getMonth(),today.getDate()));
   setMode("tenure"); setLoanType("bank");
-  document.getElementById("submitBtn").textContent="+ Add Loan";
-  document.getElementById("submitBtn").className="btn btn-primary";
-  document.getElementById("cancelBtn").style.display="none";
-  document.getElementById("formSubtitle").textContent="Enter loan details";
+  document.getElementById("submitBtn").textContent="+ Add Loan"; document.getElementById("submitBtn").className="btn btn-primary";
+  document.getElementById("cancelBtn").style.display="none"; document.getElementById("formSubtitle").textContent="Enter loan details";
   document.querySelectorAll(".loan-card").forEach(c=>c.classList.remove("editing"));
 }
-
 function submitLoan() {
-  const name=document.getElementById("loanName").value.trim();
-  const p=parseINR(document.getElementById("principal").value);
-  const e=parseINR(document.getElementById("emiAmount").value);
-  const iAmt=currentLoanType==="hand"?0:parseINR(document.getElementById("interestAmount").value);
-  const dd=Math.min(28,Math.max(1,parseInt(document.getElementById("dueDay").value)||5));
-  const sd=parseDate(document.getElementById("startDate").value);
-  if(!name||!p||!e) return alert("Please fill all required fields");
-
+  const name=document.getElementById("loanName").value.trim(), p=parseINR(document.getElementById("principal").value), e=parseINR(document.getElementById("emiAmount").value), iAmt=currentLoanType==="hand"?0:parseINR(document.getElementById("interestAmount").value), dd=Math.min(28,Math.max(1,parseInt(document.getElementById("dueDay").value)||5)), sd=parseDate(document.getElementById("startDate").value);
+  if(!name||!p||!e) return alert("Fill all required fields");
   let m=0, ed, tl="";
   if(currentMode==="tenure"){
-    const tv=parseInt(document.getElementById("tenureValue").value);
-    const tu=document.getElementById("tenureUnit").value;
+    const tv=parseInt(document.getElementById("tenureValue").value), tu=document.getElementById("tenureUnit").value;
     if(!tv) return alert("Enter tenure");
-    m=tu==="years"?tv*12:tv;
-    tl=tv+(tu==="years"?" Years":" Months");
-    let fd=new Date(sd.getFullYear(),sd.getMonth()+1,dd);
-    if(fd<=sd) fd=new Date(sd.getFullYear(),sd.getMonth()+2,dd);
+    m=tu==="years"?tv*12:tv; tl=tv+(tu==="years"?" Yrs":" Mos");
+    let fd=new Date(sd.getFullYear(),sd.getMonth()+1,dd); if(fd<=sd) fd=new Date(sd.getFullYear(),sd.getMonth()+2,dd);
     ed=new Date(fd.getFullYear(),fd.getMonth()+m-1,dd);
   } else {
     ed=parseDate(document.getElementById("endDate").value);
-    const endT=new Date(ed); endT.setHours(0,0,0,0);
-    const st=new Date(sd); st.setHours(0,0,0,0);
+    const endT=new Date(ed); endT.setHours(0,0,0,0); const st=new Date(sd); st.setHours(0,0,0,0);
     if(endT<=st) return alert("End date must be future");
-    let fd=new Date(st.getFullYear(),st.getMonth()+1,dd);
-    if(fd<=st) fd=new Date(st.getFullYear(),st.getMonth()+2,dd);
-    let ld=new Date(endT.getFullYear(),endT.getMonth(),dd);
-    if(ld>endT) ld=new Date(endT.getFullYear(),endT.getMonth()-1,dd);
+    let fd=new Date(st.getFullYear(),st.getMonth()+1,dd); if(fd<=st) fd=new Date(st.getFullYear(),st.getMonth()+2,dd);
+    let ld=new Date(endT.getFullYear(),endT.getMonth(),dd); if(ld>endT) ld=new Date(endT.getFullYear(),endT.getMonth()-1,dd);
     m = (ld<fd)?0:(ld.getFullYear()-fd.getFullYear())*12+(ld.getMonth()-fd.getMonth())+1;
     if(m<=0) return alert("End date doesn't allow 1 EMI");
-    tl=m+" Months";
+    tl=m+" Mos";
   }
-
   const lData = {name, type:currentLoanType, principal:p, emi:e, interest:iAmt, dueDay:dd, startDate:sd, endDate:ed, months:m, tenureLabel:tl, mode:currentMode};
-
-  if(editingLoanId){
-    const ix=loans.findIndex(x=>x.id===editingLoanId);
-    if(ix>-1) loans[ix]={...loans[ix], ...lData};
-  } else loans.push({id:Date.now(), ...lData});
-
-  saveToCloud(); renderLoans(); buildResults();
-  renderMonthlyTracker(); renderDashboard(); clearForm();
+  if(editingLoanId){ const ix=loans.findIndex(x=>x.id===editingLoanId); if(ix>-1) loans[ix]={...loans[ix], ...lData}; } 
+  else loans.push({id:Date.now(), ...lData});
+  saveToCloud(); renderLoans(); buildResults(); renderMonthlyTracker(); renderDashboard(); clearForm();
 }
-
 function editLoan(id) {
   const l=loans.find(x=>x.id===id); if(!l) return;
-  editingLoanId=id;
-  setLoanType(l.type||"bank"); setMode(l.mode);
-  document.getElementById("loanName").value=l.name;
-  document.getElementById("principal").value=formatINR(l.principal);
-  document.getElementById("emiAmount").value=formatINR(l.emi);
-  document.getElementById("interestAmount").value=formatINR(l.interest||0);
-  document.getElementById("dueDay").value=l.dueDay;
-  document.getElementById("startDate").value=toInputDate(l.startDate);
-  document.getElementById("endDate").value=toInputDate(l.endDate);
-  if(l.mode==="tenure"){
-    const y=Math.floor(l.months/12), r=l.months%12;
-    if(y>0&&r===0){ document.getElementById("tenureValue").value=y; document.getElementById("tenureUnit").value="years"; }
-    else { document.getElementById("tenureValue").value=l.months; document.getElementById("tenureUnit").value="months"; }
-  }
-  document.getElementById("submitBtn").textContent="💾 Update";
-  document.getElementById("submitBtn").className="btn btn-success";
-  document.getElementById("cancelBtn").style.display="inline-flex";
-  document.getElementById("formSubtitle").textContent="Editing loan";
-  window.scrollTo({top:0, behavior:'smooth'});
-  document.querySelectorAll(".loan-card").forEach(c=>c.classList.remove("editing"));
-  const card = document.querySelector(`.loan-card[data-id="${id}"]`);
-  if(card) card.classList.add("editing");
+  editingLoanId=id; setLoanType(l.type||"bank"); setMode(l.mode);
+  document.getElementById("loanName").value=l.name; document.getElementById("principal").value=formatINR(l.principal); document.getElementById("emiAmount").value=formatINR(l.emi); document.getElementById("interestAmount").value=formatINR(l.interest||0); document.getElementById("dueDay").value=l.dueDay; document.getElementById("startDate").value=toInputDate(l.startDate); document.getElementById("endDate").value=toInputDate(l.endDate);
+  if(l.mode==="tenure"){ const y=Math.floor(l.months/12), r=l.months%12; if(y>0&&r===0){document.getElementById("tenureValue").value=y; document.getElementById("tenureUnit").value="years";}else{document.getElementById("tenureValue").value=l.months; document.getElementById("tenureUnit").value="months";} }
+  document.getElementById("submitBtn").textContent="💾 Update"; document.getElementById("submitBtn").className="btn btn-success"; document.getElementById("cancelBtn").style.display="inline-flex"; document.getElementById("formSubtitle").textContent="Editing loan...";
+  window.scrollTo({top:0}); document.querySelectorAll(".loan-card").forEach(c=>c.classList.remove("editing")); document.querySelector(`.loan-card[data-id="${id}"]`).classList.add("editing");
 }
-
 function cancelEdit() { clearForm(); }
-
 function removeLoan(id) {
-  if(!confirm("Delete this loan?")) return;
+  if(!confirm("Delete loan?")) return;
   if(editingLoanId===id) clearForm();
-  loans=loans.filter(x=>x.id!==id);
-  Object.keys(paymentStatus).forEach(k=>{if(k.startsWith(id+":")) delete paymentStatus[k];});
-  saveToCloud(); renderLoans(); buildResults();
-  renderMonthlyTracker(); renderDashboard();
+  loans=loans.filter(x=>x.id!==id); Object.keys(paymentStatus).forEach(k=>{if(k.startsWith(id+":")) delete paymentStatus[k];});
+  saveToCloud(); renderLoans(); buildResults(); renderMonthlyTracker(); renderDashboard();
 }
-
 function renderLoans() {
-  const list=document.getElementById("loanList");
-  document.getElementById("loanCount").textContent=loans.length;
-  if(!loans.length){
-    list.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="icon">📋</div><p>No loans added yet</p></div>`;
-    return;
-  }
+  const list=document.getElementById("loanList"); document.getElementById("loanCount").textContent=loans.length;
+  if(!loans.length){list.innerHTML=`<div class="empty-state"><div class="icon">📋</div><p>No loans</p></div>`; return;}
   list.innerHTML=loans.map((l,i)=>{
     const clr=loanColors[i%6], tp=l.type||"bank";
     return `<div class="loan-card ${l.id===editingLoanId?'editing':''}" data-id="${l.id}" style="--loan-color:${clr}">
-      <div class="loan-card-top">
-        <div class="loan-info">
-          <div class="loan-title-row"><span class="loan-title">${l.name}</span><span class="loan-tag ${tp}">${tp==="hand"?"🤝 Hand":"🏦 Bank"}</span></div>
-          <div class="loan-meta">Due ${getOrdinal(l.dueDay)} • ${l.tenureLabel}</div>
-        </div>
-        <div class="loan-card-actions">
-          <button class="btn btn-icon btn-edit" onclick="editLoan(${l.id})">Edit</button>
-          <button class="btn btn-icon btn-delete" onclick="removeLoan(${l.id})">✕</button>
-        </div>
-      </div>
-      <div class="loan-stats">
-        <div><div class="loan-stat-label">Principal</div><div class="loan-stat-value amt-blur">₹${formatINR(l.principal)}</div></div>
-        <div><div class="loan-stat-label">EMI</div><div class="loan-stat-value amt-blur">₹${formatINR(l.emi)}</div></div>
-        <div><div class="loan-stat-label">Interest</div><div class="loan-stat-value amt-blur">${tp==="hand"?"—":"₹"+formatINR(l.interest||0)}</div></div>
-        <div><div class="loan-stat-label">EMIs</div><div class="loan-stat-value">${l.months}</div></div>
-      </div>
+      <div class="loan-card-top"><div class="loan-info"><div class="loan-title-row"><span class="loan-title">${l.name}</span><span class="loan-tag ${tp}">${tp==="hand"?"🤝 Hand":"🏦 Bank"}</span></div><div class="loan-meta">Due ${getOrdinal(l.dueDay)} • ${l.tenureLabel}</div></div>
+      <div class="loan-card-actions"><button class="btn-icon btn-edit" onclick="editLoan(${l.id})">✏️</button><button class="btn-icon btn-delete" onclick="removeLoan(${l.id})">✕</button></div></div>
+      <div class="loan-stats"><div><div class="loan-stat-label">Principal</div><div class="loan-stat-value amt-blur">₹${formatINR(l.principal)}</div></div><div><div class="loan-stat-label">EMI</div><div class="loan-stat-value amt-blur">₹${formatINR(l.emi)}</div></div><div><div class="loan-stat-label">Int/mo</div><div class="loan-stat-value amt-blur">${tp==="hand"?"—":"₹"+formatINR(l.interest||0)}</div></div><div><div class="loan-stat-label">EMIs</div><div class="loan-stat-value">${l.months}</div></div></div>
     </div>`;
   }).join("");
 }
@@ -631,13 +667,9 @@ function buildResults() {
   results=[]; schedules={};
   loans.forEach((l,i)=>{
     results.push({...l, totalPayable:l.emi*l.months, totalInterest:(l.interest||0)*l.months, colorIndex:i});
-    const ent=[];
-    let fd=new Date(l.startDate.getFullYear(),l.startDate.getMonth()+1,l.dueDay);
-    if(fd<=l.startDate) fd=new Date(l.startDate.getFullYear(),l.startDate.getMonth()+2,l.dueDay);
+    const ent=[]; let fd=new Date(l.startDate.getFullYear(),l.startDate.getMonth()+1,l.dueDay); if(fd<=l.startDate) fd=new Date(l.startDate.getFullYear(),l.startDate.getMonth()+2,l.dueDay);
     for(let j=1;j<=l.months;j++){
-      const dd=new Date(fd.getFullYear(),fd.getMonth()+j-1,l.dueDay);
-      const k=monthKey(dd);
-      const st=paymentStatus[l.id+":"+k];
+      const dd=new Date(fd.getFullYear(),fd.getMonth()+j-1,l.dueDay), k=monthKey(dd), st=paymentStatus[l.id+":"+k];
       let stat = st===false?"unpaid":st===true?"paid":dd<today?"paid":(dd.getFullYear()===today.getFullYear()&&dd.getMonth()===today.getMonth())?"unpaid":"upcoming";
       ent.push({monthNo:j, dueDate:dd, monthKey:k, emi:l.emi, status:stat});
     }
@@ -645,22 +677,17 @@ function buildResults() {
   });
 }
 
-function setPayment(lId, k, paid) {
-  paymentStatus[lId+":"+k]=paid;
-  saveToCloud(); buildResults();
-  renderMonthlyTracker(); renderDashboard();
-}
+function setPayment(lId, k, paid) { paymentStatus[lId+":"+k]=paid; saveToCloud(); buildResults(); renderMonthlyTracker(); renderDashboard(); }
 
 function changeMonth(d){ currentViewMonth=new Date(currentViewMonth.getFullYear(),currentViewMonth.getMonth()+d,1); renderMonthlyTracker(); }
 function goToday(){ currentViewMonth=new Date(); renderMonthlyTracker(); }
 
 function renderMonthlyTracker() {
   const c=document.getElementById("monthlyContent");
-  if(!results.length){ c.innerHTML=`<div class="empty-state"><div class="icon">📅</div><p>Add loans to start tracking</p></div>`; return; }
-  const y=currentViewMonth.getFullYear(), m=currentViewMonth.getMonth();
-  const isCur=y===today.getFullYear()&&m===today.getMonth();
+  if(!results.length){ c.innerHTML=`<div class="empty-state"><div class="icon">📅</div><p>Add loans first</p></div>`; return; }
+  const y=currentViewMonth.getFullYear(), m=currentViewMonth.getMonth(), isCur=y===today.getFullYear()&&m===today.getMonth();
   const ents=[];
-  results.forEach((l,i)=>{ const e=schedules[l.id].find(x=>x.dueDate.getFullYear()===y&&x.dueDate.getMonth()===m); if(e) ents.push({...e, loanId:l.id, loanName:l.name, loanType:l.type||"bank", color:loanColors[i%6]}); });
+  results.forEach((l,i)=>{const e=schedules[l.id].find(x=>x.dueDate.getFullYear()===y&&x.dueDate.getMonth()===m); if(e) ents.push({...e, loanId:l.id, loanName:l.name, loanType:l.type||"bank", color:loanColors[i%6]});});
   ents.sort((a,b)=>a.status==="paid"&&b.status!=="paid"?1:a.status!=="paid"&&b.status==="paid"?-1:a.dueDate-b.dueDate);
   const tot=ents.reduce((s,e)=>s+e.emi,0), pd=ents.filter(e=>e.status==="paid"), up=ents.filter(e=>e.status!=="paid"), upAmt=up.reduce((s,e)=>s+e.emi,0), pg=ents.length?Math.round(pd.length/ents.length*100):0;
 
@@ -669,48 +696,42 @@ function renderMonthlyTracker() {
     return `<div class="emi-card ${p?'paid':'unpaid'}" style="--loan-color:${e.color}"><div class="emi-dot"></div><div class="emi-info"><div class="emi-name">${e.loanName} ${e.loanType==="hand"?'<span class="loan-tag hand">🤝</span>':''}</div><div class="emi-date">Due: ${dt}</div><div class="emi-badge ${p?'paid':'unpaid'}">${p?'✓ Paid':'○ Unpaid'}</div></div><div class="emi-amount amt-blur">₹${formatINR(e.emi)}</div><div class="toggle-switch"><button class="paid-btn ${p?'active':''}" onclick="setPayment(${e.loanId},'${e.monthKey}',true)">Paid</button><button class="unpaid-btn ${!p?'active':''}" onclick="setPayment(${e.loanId},'${e.monthKey}',false)">Unpaid</button></div></div>`;
   }).join("") : `<div class="empty-state"><div class="icon">🗓️</div><p>No EMIs due in ${monthName(m)} ${y}</p></div>`;
 
-  c.innerHTML = `<div class="month-nav"><button class="month-nav-btn" onclick="changeMonth(-1)">‹</button><div class="month-center"><div class="month-display">${monthName(m)} ${y}</div><div class="month-pills"><button class="month-pill" onclick="changeMonth(-12)">« Year</button>${!isCur?`<button class="month-pill" onclick="goToday()">Today</button>`:""}<button class="month-pill" onclick="changeMonth(12)">Year »</button></div></div><button class="month-nav-btn" onclick="changeMonth(1)">›</button></div>
-  <div class="month-summary"><div class="summary-row"><h3>Summary</h3><div class="summary-total"><div class="summary-amt amt-blur">₹${formatINR(tot)}</div><div class="summary-amt-label">Total Due</div></div></div><div class="stats-row"><div class="stat-box total"><div class="stat-num">${ents.length}</div><div class="stat-label">Total</div></div><div class="stat-box paid"><div class="stat-num">${pd.length}</div><div class="stat-label">Paid</div></div><div class="stat-box unpaid"><div class="stat-num">${up.length}</div><div class="stat-label">Unpaid</div></div><div class="stat-box overdue"><div class="stat-num">0</div><div class="stat-label">Overdue</div></div></div><div class="progress-section"><div class="progress-info"><span>Progress</span><span>${pd.length}/${ents.length} • ${pg}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pg}%"></div></div></div></div>
-  <div class="emi-list">${listHtml}</div>
-  ${ents.length?`<div class="remaining-card ${upAmt===0?'paid':''}"><div><div class="remaining-title">${upAmt===0?'✅ All Paid':'Remaining'}</div><div class="remaining-sub">${up.length} EMI${up.length!==1?'s':''} pending</div></div><div class="remaining-amt amt-blur">₹${formatINR(upAmt)}</div></div>`:""}`;
+  c.innerHTML = `
+    <div class="month-nav"><button class="month-nav-btn" onclick="changeMonth(-1)">‹</button><div class="month-center"><div class="month-display">${monthName(m)} ${y}</div><div class="month-pills"><button class="month-pill" onclick="changeMonth(-12)">« Yr</button>${!isCur?`<button class="month-pill" onclick="goToday()">Today</button>`:""}<button class="month-pill" onclick="changeMonth(12)">Yr »</button></div></div><button class="month-nav-btn" onclick="changeMonth(1)">›</button></div>
+    <div class="month-summary"><div class="summary-row"><h3>Summary</h3><div class="summary-total"><div class="summary-amt amt-blur">₹${formatINR(tot)}</div><div class="summary-amt-label">Total Due</div></div></div><div class="stats-row"><div class="stat-box total"><div class="stat-num">${ents.length}</div><div class="stat-label">Total</div></div><div class="stat-box paid"><div class="stat-num">${pd.length}</div><div class="stat-label">Paid</div></div><div class="stat-box unpaid"><div class="stat-num">${up.length}</div><div class="stat-label">Unpaid</div></div><div class="stat-box overdue"><div class="stat-num">0</div><div class="stat-label">Overdue</div></div></div><div class="progress-section"><div class="progress-info"><span>Progress</span><span>${pd.length}/${ents.length} (${pg}%)</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pg}%"></div></div></div></div>
+    <div class="emi-list">${listHtml}</div>
+    ${ents.length?`<div class="remaining-card ${upAmt===0?'paid':''}"><div><div class="remaining-title">${upAmt===0?'✅ All Paid':'Remaining to Pay'}</div><div class="remaining-sub">${up.length} pending</div></div><div class="remaining-amt amt-blur">₹${formatINR(upAmt)}</div></div>`:""}
+  `;
 }
 
 function setDashboardTab(t){ activeDashTab=t; renderDashboard(); }
-
 function renderDashboard(){
   const c=document.getElementById("dashboardContent");
   if(!results.length){ c.innerHTML=`<div class="empty-state"><div class="icon">📈</div><p>Add loans to see dashboard</p></div>`; return; }
   const tE=results.reduce((s,r)=>s+r.emi,0), tP=results.reduce((s,r)=>s+r.principal,0), tI=results.reduce((s,r)=>s+(r.interest||0),0), tH=results.filter(r=>r.type==="hand").length;
-  c.innerHTML = `<div class="kpi-grid"><div class="kpi-card purple"><div class="kpi-label">Monthly EMI</div><div class="kpi-value amt-blur">₹${formatINR(tE)}</div></div><div class="kpi-card cyan"><div class="kpi-label">Principal</div><div class="kpi-value amt-blur">₹${formatINR(tP)}</div></div><div class="kpi-card amber"><div class="kpi-label">Interest/mo</div><div class="kpi-value amt-blur">₹${formatINR(tI)}</div></div><div class="kpi-card pink"><div class="kpi-label">Hand Loans</div><div class="kpi-value">${tH}</div></div></div>
-  <div class="tab-nav"><button class="tab-btn ${activeDashTab==='overview'?'active':''}" onclick="setDashboardTab('overview')">Overview</button><button class="tab-btn ${activeDashTab==='schedule'?'active':''}" onclick="setDashboardTab('schedule')">Schedule</button><button class="tab-btn ${activeDashTab==='due'?'active':''}" onclick="setDashboardTab('due')">Upcoming</button></div>
-  ${activeDashTab==="overview"?buildOverview():activeDashTab==="schedule"?buildSchedule():buildDueDates()}`;
+  c.innerHTML = `
+    <div class="kpi-grid"><div class="kpi-card purple"><div class="kpi-label">Monthly EMI</div><div class="kpi-value amt-blur">₹${formatINR(tE)}</div></div><div class="kpi-card cyan"><div class="kpi-label">Principal</div><div class="kpi-value amt-blur">₹${formatINR(tP)}</div></div><div class="kpi-card amber"><div class="kpi-label">Interest/mo</div><div class="kpi-value amt-blur">₹${formatINR(tI)}</div></div><div class="kpi-card pink"><div class="kpi-label">Hand Loans</div><div class="kpi-value">${tH}</div></div></div>
+    <div class="tab-nav"><button class="tab-btn ${activeDashTab==='overview'?'active':''}" onclick="setDashboardTab('overview')">Overview</button><button class="tab-btn ${activeDashTab==='schedule'?'active':''}" onclick="setDashboardTab('schedule')">Schedule</button><button class="tab-btn ${activeDashTab==='due'?'active':''}" onclick="setDashboardTab('due')">Upcoming</button></div>
+    ${activeDashTab==="overview"?buildOverview():activeDashTab==="schedule"?buildSchedule():buildDueDates()}
+  `;
 }
-
 function buildOverview(){
   let tE=0, tP=0, tI=0;
-  const rows = results.map(l=>{ tE+=l.emi; tP+=l.principal; tI+=(l.interest||0); const tp=l.type||"bank";
-    return `<tr><td><div class="loan-cell"><span class="dot" style="--loan-color:${loanColors[l.colorIndex%6]}"></span>${l.name} <span class="loan-tag ${tp}">${tp==="hand"?"🤝":"🏦"}</span></div></td><td class="amt-blur">₹${formatINR(l.principal)}</td><td class="amt-blur">₹${formatINR(l.emi)}</td><td class="amt-blur">${tp==="hand"?"—":"₹"+formatINR(l.interest||0)}</td><td>${l.tenureLabel}</td><td class="amt-blur">₹${formatINR(l.totalPayable)}</td></tr>`;
-  }).join("");
-  return `<div class="table-wrap"><table><thead><tr><th>Loan</th><th>Principal</th><th>EMI</th><th>Interest</th><th>Tenure</th><th>Total</th></tr></thead><tbody>${rows}<tr class="total-row"><td>Total</td><td class="amt-blur">₹${formatINR(tP)}</td><td class="amt-blur">₹${formatINR(tE)}</td><td class="amt-blur">₹${formatINR(tI)}</td><td></td><td></td></tr></tbody></table></div>`;
+  const rows = results.map(l=>{ tE+=l.emi; tP+=l.principal; tI+=(l.interest||0); const tp=l.type||"bank"; return `<tr><td><div class="loan-cell"><span class="dot" style="--loan-color:${loanColors[l.colorIndex%6]}"></span>${l.name} <span class="loan-tag ${tp}">${tp==="hand"?"🤝":"🏦"}</span></div></td><td class="amt-blur">₹${formatINR(l.principal)}</td><td class="amt-blur">₹${formatINR(l.emi)}</td><td class="amt-blur">${tp==="hand"?"—":"₹"+formatINR(l.interest||0)}</td><td>${l.tenureLabel}</td><td class="amt-blur">₹${formatINR(l.totalPayable)}</td></tr>`; }).join("");
+  return `<div class="table-wrap"><table><thead><tr><th>Loan</th><th>Principal</th><th>EMI</th><th>Interest/mo</th><th>Tenure</th><th>Total</th></tr></thead><tbody>${rows}<tr class="total-row"><td>Total</td><td class="amt-blur">₹${formatINR(tP)}</td><td class="amt-blur">₹${formatINR(tE)}</td><td class="amt-blur">₹${formatINR(tI)}</td><td></td><td></td></tr></tbody></table></div>`;
 }
-
 function buildSchedule(){
   const map={};
   results.forEach(l=>schedules[l.id].forEach(e=>{ const k=monthKey(e.dueDate); if(!map[k]) map[k]={m:e.dueDate.getMonth(), y:e.dueDate.getFullYear(), tot:0, ents:[]}; map[k].tot+=e.emi; map[k].ents.push({lName:l.name, col:loanColors[l.colorIndex%6], emi:e.emi, st:e.status}); }));
-  return Object.keys(map).sort().slice(0,24).map(k=>{ const x=map[k];
-    return `<div class="sch-month" onclick="this.querySelector('.sch-breakdown').classList.toggle('show')"><div class="sch-head"><div class="sch-title-area"><div class="sch-badge">${shortMonth(x.m)}</div><div class="sch-title"><h4>${monthName(x.m)} ${x.y}</h4><p>${x.ents.length} EMI${x.ents.length>1?'s':''}</p></div></div><div class="sch-total amt-blur">₹${formatINR(x.tot)}</div></div><div class="sch-breakdown">${x.ents.map(e=>`<div class="sch-row"><span><span class="dot" style="--loan-color:${e.col};margin-right:8px"></span>${e.lName} <span style="font-size:.75rem;color:${e.st==='paid'?'var(--success)':e.st==='unpaid'?'var(--warning)':'var(--text-3)'};margin-left:6px;font-weight:700">${e.st==='paid'?'✓':e.st==='unpaid'?'○':'·'}</span></span><span class="amt-blur" style="font-weight:700">₹${formatINR(e.emi)}</span></div>`).join("")}</div></div>`;
-  }).join("");
+  return Object.keys(map).sort().slice(0,24).map(k=>{ const x=map[k]; return `<div class="sch-month" onclick="this.querySelector('.sch-breakdown').classList.toggle('show')"><div class="sch-head"><div class="sch-title-area"><div class="sch-badge">${shortMonth(x.m)}</div><div class="sch-title"><h4>${monthName(x.m)} ${x.y}</h4><p>${x.ents.length} EMI(s)</p></div></div><div class="sch-total amt-blur">₹${formatINR(x.tot)}</div></div><div class="sch-breakdown">${x.ents.map(e=>`<div class="sch-row"><span><span class="dot" style="--loan-color:${e.col};margin-right:8px"></span>${e.lName} <span style="font-size:.72rem;color:${e.st==='paid'?'var(--success)':e.st==='unpaid'?'var(--warning)':'var(--text-3)'};margin-left:6px;font-weight:700">${e.st==='paid'?'✓':e.st==='unpaid'?'○':'·'}</span></span><span class="amt-blur" style="font-weight:700">₹${formatINR(e.emi)}</span></div>`).join("")}</div></div>`; }).join("");
 }
-
 function buildDueDates(){
   const mg={};
   results.forEach(l=>{ schedules[l.id].forEach(e=>{ if(e.status==="paid") return; const k=monthKey(e.dueDate); if(!mg[k]) mg[k]={m:e.dueDate.getMonth(), y:e.dueDate.getFullYear(), tot:0, ents:[]}; mg[k].tot+=e.emi; mg[k].ents.push({name:l.name, tp:l.type||"bank", col:loanColors[l.colorIndex%6], emi:e.emi, dd:e.dueDate, diff:daysDiff(e.dueDate)}); }); });
-  const keys=Object.keys(mg).sort();
-  if(!keys.length) return `<div class="empty-state"><div class="icon">✅</div><p>All EMIs are paid!</p></div>`;
+  const keys=Object.keys(mg).sort(); if(!keys.length) return `<div class="empty-state"><div class="icon">✅</div><p>All EMIs are paid!</p></div>`;
   return keys.slice(0,12).map(k=>{
     const g=mg[k]; g.ents.sort((a,b)=>a.dd-b.dd); const cur=g.y===today.getFullYear()&&g.m===today.getMonth();
-    return `<div class="upcoming-month"><div class="upcoming-month-header"><div class="upcoming-left"><div class="upcoming-badge"><span class="m">${shortMonth(g.m)}</span><span class="y">${g.y}</span></div><div class="upcoming-month-title"><h4>${monthName(g.m)} ${g.y} ${cur?"• This Month":""}</h4><p>${g.ents.length} payment${g.ents.length>1?'s':''} pending</p></div></div><div class="upcoming-total"><div class="amt amt-blur">₹${formatINR(g.tot)}</div><div class="lbl">Total</div></div></div>
-    <div class="upcoming-list">${g.ents.map(e=>{
+    return `<div class="upcoming-month"><div class="upcoming-month-header"><div class="upcoming-left"><div class="upcoming-badge"><span class="m">${shortMonth(g.m)}</span><span class="y">${g.y}</span></div><div class="upcoming-month-title"><h4>${monthName(g.m)} ${g.y} ${cur?"(This Month)":""}</h4><p>${g.ents.length} pending</p></div></div><div class="upcoming-total"><div class="amt amt-blur">₹${formatINR(g.tot)}</div><div class="lbl">Month Total</div></div></div><div class="upcoming-list">${g.ents.map(e=>{
       const dtxt=e.dd.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
       let dc="",dx=""; if(e.diff<0){dc="overdue";dx=Math.abs(e.diff)+"d overdue";}else if(e.diff===0){dc="today";dx="Today";}else if(e.diff<=7){dc="soon";dx="In "+e.diff+"d";}else{dx="In "+e.diff+"d";}
       return `<div class="upcoming-row" style="--loan-color:${e.col}"><span class="dot" style="--loan-color:${e.col}"></span><div><div class="upcoming-name">${e.name} ${e.tp==="hand"?'<span class="loan-tag hand">🤝</span>':''}</div><div class="upcoming-date">${dtxt}</div></div><div class="upcoming-amt amt-blur">₹${formatINR(e.emi)}</div><div class="upcoming-days ${dc}">${dx}</div></div>`;
@@ -719,7 +740,7 @@ function buildDueDates(){
 }
 
 ["principal","emiAmount","interestAmount"].forEach(id=>{ document.getElementById(id).addEventListener("blur", function(){const v=parseINR(this.value);if(v)this.value=formatINR(v);}); });
-document.querySelectorAll(".form-grid input").forEach(inp=>inp.addEventListener("keypress",e=>{ if(e.key==="Enter") submitLoan(); }));
+document.querySelectorAll(".form-grid input").forEach(inp=>inp.addEventListener("keypress",e=>{if(e.key==="Enter") submitLoan();}));
 </script>
 </body>
 </html>
