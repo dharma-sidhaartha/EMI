@@ -99,18 +99,48 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);cursor:po
 .tip-text{font-size:13px;color:#e2e8f0;line-height:1.55}
 
 .main{flex:1;padding:24px 24px 60px 0;min-width:0}
-.topbar{padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.topbar{padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;overflow:visible}
 .topbar-date{font-size:12px;color:var(--muted)}
 .topbar-title{font-size:20px;font-weight:600;color:white}
-.topbar-actions{display:flex;align-items:center;gap:8px}
+.topbar-actions{display:flex;align-items:center;gap:8px;position:relative;z-index:50}
+.topbar.glass{overflow:visible !important}
+
 .icon-btn{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,rgba(255,255,255,0.12) 0%,rgba(255,255,255,0.05) 100%);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#e2e8f0;transition:all .25s;box-shadow:0 4px 12px rgba(0,0,0,0.15),inset 0 1px 0 rgba(255,255,255,0.1)}
 .icon-btn:hover{background:linear-gradient(145deg,rgba(255,255,255,0.18) 0%,rgba(255,255,255,0.08) 100%);color:white;transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.2)}
 .icon-btn svg{width:18px;height:18px}
 .day-chip{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;animation:pulse-glow 2.5s ease-in-out infinite}
-.user-chip{padding:10px 16px;border-radius:14px;display:flex;align-items:center;gap:10px;color:white;font-weight:600;font-size:13px;max-width:220px;background:linear-gradient(145deg,rgba(99,102,241,0.3) 0%,rgba(139,92,246,0.2) 100%);border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 28px rgba(99,102,241,0.4),inset 0 1px 0 rgba(255,255,255,0.2);animation:pulse-glow 2.5s ease-in-out infinite;position:relative;overflow:hidden}
-.user-chip::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)}
-.user-chip-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.15) 100%);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2)}
+.user-chip{padding:10px 16px;border-radius:14px;display:flex;align-items:center;gap:10px;color:white;font-weight:600;font-size:13px;max-width:220px;background:linear-gradient(145deg,rgba(99,102,241,0.3) 0%,rgba(139,92,246,0.2) 100%);border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 28px rgba(99,102,241,0.4),inset 0 1px 0 rgba(255,255,255,0.2);position:relative;overflow:visible;cursor:pointer;transition:all .25s}
+.user-chip:hover{box-shadow:0 10px 32px rgba(99,102,241,0.5),inset 0 1px 0 rgba(255,255,255,0.3);transform:translateY(-1px)}
+.user-chip-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.15) 100%);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);overflow:hidden}
+.user-chip-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .user-chip-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.user-chip-arrow{width:12px;height:12px;opacity:0.7;transition:transform .25s}
+.user-chip:hover .user-chip-arrow{opacity:1;transform:rotate(180deg)}
+
+/* User dropdown */
+.user-dropdown{position:fixed;top:0;left:0;width:260px;border-radius:18px;z-index:10000;display:none;animation:dropIn .25s ease-out;overflow:hidden;background:linear-gradient(145deg,rgba(36,36,60,0.98),rgba(18,18,36,0.99));border:1px solid rgba(255,255,255,0.2);box-shadow:0 26px 64px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.15);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px)}
+.user-dropdown.show{display:block}
+@keyframes dropIn{from{opacity:0;transform:translateY(-10px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.user-dropdown-head{padding:18px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:12px}
+.user-dropdown-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.08) 100%);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;border:2px solid rgba(255,255,255,0.2);flex-shrink:0;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.15)}
+.user-dropdown-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.user-dropdown-info{min-width:0}
+.user-dropdown-name{font-weight:700;color:white;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-dropdown-email{font-size:11px;color:#94a3b8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-dropdown-items{padding:8px}
+.user-dropdown-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;font-size:13px;font-weight:500;color:#cbd5e1;transition:all .2s;width:100%;text-align:left;cursor:pointer;background:transparent;border:none}
+.user-dropdown-item:hover{background:linear-gradient(145deg,rgba(255,255,255,0.12) 0%,rgba(255,255,255,0.05) 100%);color:white;transform:translateX(4px)}
+.user-dropdown-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.7}
+.user-dropdown-item:hover svg{opacity:1}
+.user-dropdown-item.danger{color:#fda4af}
+.user-dropdown-item.danger:hover{background:linear-gradient(145deg,rgba(244,63,94,0.18) 0%,rgba(244,63,94,0.06) 100%);color:#fda4af}
+.user-dropdown-sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);margin:4px 14px}
+
+/* Avatar picker */
+.avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:8px 0}
+.avatar-option{width:100%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all .25s;border:2px solid transparent;background:linear-gradient(145deg,rgba(255,255,255,0.12) 0%,rgba(255,255,255,0.04) 100%);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.avatar-option:hover{transform:scale(1.15);border-color:rgba(99,102,241,0.6);box-shadow:0 8px 22px rgba(99,102,241,0.3)}
+.avatar-option.selected{border-color:#6366f1;box-shadow:0 6px 18px rgba(99,102,241,0.4);background:linear-gradient(145deg,rgba(99,102,241,0.3) 0%,rgba(99,102,241,0.1) 100%)}
 @keyframes pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,0.5)}50%{box-shadow:0 0 30px 6px rgba(139,92,246,0.25)}}
 
 .page{animation:slideUp .5s cubic-bezier(0.23,1,0.32,1);display:flex;flex-direction:column;gap:22px}
@@ -459,7 +489,7 @@ button{isolation:isolate}
   <div class="glow" style="bottom:-60px;right:-60px;width:360px;height:360px;background:rgba(236,72,153,0.2)"></div>
   <div class="auth-box glass-strong" style="border-radius:24px">
     <div class="auth-logo grad-primary">
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="none"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 32 32" width="32" height="32" fill="none"><rect x="4" y="8" width="24" height="16" rx="3" stroke="white" stroke-width="2"/><path d="M4 13h24" stroke="white" stroke-width="2"/><circle cx="9" cy="19" r="1.5" fill="white" opacity=".9"/><path d="M14 19h8" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity=".6"/><path d="M20 4l-4 4M12 4l4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
     </div>
     <h2 class="auth-title">My EMI Buddy</h2>
     <p class="auth-sub">Login to sync your loans across devices</p>
@@ -492,7 +522,7 @@ button{isolation:isolate}
       <aside class="sidebar">
         <div class="brand glass">
           <div class="brand-icon grad-primary">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 32 32" width="26" height="26" fill="none"><rect x="4" y="8" width="24" height="16" rx="3" stroke="white" stroke-width="2"/><path d="M4 13h24" stroke="white" stroke-width="2"/><circle cx="9" cy="19" r="1.5" fill="white" opacity=".9"/><path d="M14 19h8" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity=".6"/><path d="M20 4l-4 4M12 4l4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
           <div>
             <div class="brand-title">My EMI Buddy</div>
@@ -517,11 +547,12 @@ button{isolation:isolate}
               <svg id="privacyIcon" viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
               <span id="privacyText">Privacy</span>
             </button>
-            <button class="reset-btn" onclick="doLogout()" title="Sign Out">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Logout</span>
-            </button>
-            <div class="user-chip grad-primary" id="userChip" title="Logged in user">U</div>
+
+            <div class="user-chip" id="userChip" onclick="toggleUserMenu(event)" style="flex-shrink:0">
+              <span class="user-chip-avatar" id="chipAvatar">U</span>
+              <span class="user-chip-name" id="chipName">User</span>
+              <svg class="user-chip-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
           </div>
         </div>
         <div id="page"></div>
@@ -533,6 +564,35 @@ button{isolation:isolate}
   </div>
 </div>
 
+<div class="user-dropdown" id="userDropdown" onclick="event.stopPropagation()">
+  <div class="user-dropdown-head">
+    <div class="user-dropdown-avatar" id="dropdownAvatar">U</div>
+    <div class="user-dropdown-info">
+      <div class="user-dropdown-name" id="dropdownName">User</div>
+      <div class="user-dropdown-email" id="dropdownEmail">email@example.com</div>
+    </div>
+  </div>
+  <div class="user-dropdown-items">
+    <button class="user-dropdown-item" onclick="openProfileModal(event)">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 21a8 8 0 10-16 0M12 13a5 5 0 100-10 5 5 0 000 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Profile
+    </button>
+    <button class="user-dropdown-item" onclick="openAvatarPicker(event)">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="1.8"/></svg>
+      Change Avatar
+    </button>
+    <div class="user-dropdown-sep"></div>
+    <button class="user-dropdown-item" onclick="openAboutModal(event)">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      About
+    </button>
+    <div class="user-dropdown-sep"></div>
+    <button class="user-dropdown-item danger" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Logout
+    </button>
+  </div>
+</div>
 <div id="modals"></div>
 <div class="toast" id="toast"></div>
 
@@ -690,6 +750,131 @@ function togglePrivacy() {
   render();
 }
 
+/* ==================  USER MENU + AVATAR  ================== */
+const AVATAR_LIST = ['😎','🦊','🐱','🐶','🦁','🐼','🦄','🐸','🐵','🦉','🐯','🐻','🐰','🐲','🦅','🐺','🦋','🌟','💎','🔥'];
+const AVATAR_KEY = 'emibuddy-avatar';
+
+function getSavedAvatar() { try { return localStorage.getItem(AVATAR_KEY) || ''; } catch(e) { return ''; } }
+function saveAvatar(av) { try { localStorage.setItem(AVATAR_KEY, av); } catch(e) {} }
+
+function toggleUserMenu(e) {
+  if(e) { e.stopPropagation(); e.preventDefault(); }
+  var dd = document.getElementById('userDropdown');
+  var chip = document.getElementById('userChip');
+  if (!dd || !chip) return;
+  if (dd.classList.contains('show')) {
+    dd.classList.remove('show');
+    return;
+  }
+  // Position the dropdown based on chip's bounding rect
+  var rect = chip.getBoundingClientRect();
+  dd.style.top = (rect.bottom + 10) + 'px';
+  dd.style.left = (rect.right - 260) + 'px';
+  dd.classList.add('show');
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('userDropdown');
+  var chip = document.getElementById('userChip');
+  if (dd && dd.classList.contains('show') && chip && !chip.contains(e.target) && !dd.contains(e.target)) {
+    dd.classList.remove('show');
+  }
+});
+
+// Close on scroll
+document.addEventListener('scroll', function() {
+  var dd = document.getElementById('userDropdown');
+  if (dd) dd.classList.remove('show');
+}, true);
+
+// Reposition dropdown on resize
+window.addEventListener('resize', function() {
+  var dd = document.getElementById('userDropdown');
+  var chip = document.getElementById('userChip');
+  if (dd && chip && dd.classList.contains('show')) {
+    var rect = chip.getBoundingClientRect();
+    dd.style.top = (rect.bottom + 10) + 'px';
+    dd.style.left = (rect.right - 260) + 'px';
+  }
+});
+
+function openProfileModal(e) {
+  e.stopPropagation();
+  document.getElementById('userDropdown').classList.remove('show');
+  if (!currentUser) return;
+  const email = currentUser.email || '';
+  const nameRaw = email.split('@')[0];
+  const displayName = nameRaw.charAt(0).toUpperCase() + nameRaw.slice(1).toLowerCase();
+  const avatar = getSavedAvatar();
+  const joined = currentUser.metadata && currentUser.metadata.creationTime
+    ? new Date(currentUser.metadata.creationTime).toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'})
+    : 'N/A';
+  document.getElementById('modals').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal glass-strong" style="max-width:400px">
+    <div class="modal-head"><div><div class="modal-title">Profile</div><div class="modal-sub">Your account details</div></div><button class="modal-close" onclick="closeModal()">${ICONS.close}</button></div>
+    <div class="modal-body" style="text-align:center">
+      <div style="width:80px;height:80px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(145deg,rgba(99,102,241,0.3) 0%,rgba(139,92,246,0.15) 100%);border:2px solid rgba(255,255,255,0.2);box-shadow:0 8px 28px rgba(99,102,241,0.3),inset 0 1px 0 rgba(255,255,255,0.2)">${avatar || displayName.charAt(0)}</div>
+      <div style="font-size:20px;font-weight:700;color:white;margin-bottom:4px">${esc(displayName)}</div>
+      <div style="font-size:12px;color:#94a3b8;margin-bottom:20px">${esc(email)}</div>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <div class="mini-stat" style="flex:1"><div class="l">Loans</div><div class="v" style="color:#a5b4fc">${state.loans.length}</div></div>
+        <div class="mini-stat" style="flex:1"><div class="l">Joined</div><div class="v" style="color:#6ee7b7;font-size:11px">${joined}</div></div>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function openAvatarPicker(e) {
+  e.stopPropagation();
+  document.getElementById('userDropdown').classList.remove('show');
+  const currentAvatar = getSavedAvatar();
+  document.getElementById('modals').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal glass-strong" style="max-width:380px">
+    <div class="modal-head"><div><div class="modal-title">Change Avatar</div><div class="modal-sub">Pick your avatar emoji</div></div><button class="modal-close" onclick="closeModal()">${ICONS.close}</button></div>
+    <div class="modal-body">
+      <div class="avatar-grid">
+        ${AVATAR_LIST.map(av => `<button class="avatar-option ${currentAvatar===av?'selected':''}" onclick="pickAvatar('${av}')">${av}</button>`).join('')}
+      </div>
+      <div class="modal-actions" style="margin-top:16px">
+        <button class="btn-secondary" onclick="pickAvatar('')">Reset to Letter</button>
+        <button class="btn-secondary" onclick="closeModal()">Done</button>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function pickAvatar(av) {
+  saveAvatar(av);
+  render();
+  closeModal();
+  toast(av ? 'Avatar updated to ' + av : 'Avatar reset');
+}
+
+function openAboutModal(e) {
+  e.stopPropagation();
+  document.getElementById('userDropdown').classList.remove('show');
+  document.getElementById('modals').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal glass-strong" style="max-width:400px">
+    <div class="modal-head"><div><div class="modal-title">About</div><div class="modal-sub">My EMI Buddy</div></div><button class="modal-close" onclick="closeModal()">${ICONS.close}</button></div>
+    <div class="modal-body" style="text-align:center">
+      <div style="width:72px;height:72px;border-radius:18px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(99,102,241,0.4),inset 0 2px 0 rgba(255,255,255,0.4);background:linear-gradient(145deg,#6366f1 0%,#8b5cf6 30%,#a855f7 55%,#ec4899 80%,#f43f5e 100%);border:1px solid rgba(255,255,255,0.3)">
+        <svg viewBox="0 0 32 32" width="32" height="32" fill="none"><rect x="4" y="8" width="24" height="16" rx="3" stroke="white" stroke-width="2"/><path d="M4 13h24" stroke="white" stroke-width="2"/><circle cx="9" cy="19" r="1.5" fill="white" opacity=".9"/><path d="M14 19h8" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity=".6"/><path d="M20 4l-4 4M12 4l4 4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div style="font-size:22px;font-weight:800;color:white;margin-bottom:4px">My EMI Buddy</div>
+      <div style="font-size:12px;color:#94a3b8;margin-bottom:20px">Version 1.0.0</div>
+      <div style="font-size:13px;color:#cbd5e1;line-height:1.7;margin-bottom:20px">
+        A premium EMI & loan tracking app with real-time Firebase sync, privacy mode, and beautiful UI. Track bank loans, hand loans, and credit card EMIs all in one place.
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+        <span class="tag bank" style="font-size:9px">Bank Loans</span>
+        <span class="tag hand" style="font-size:9px">Hand Loans</span>
+        <span class="tag credit" style="font-size:9px">Credit Cards</span>
+        <span class="tag done" style="font-size:9px">Firebase Sync</span>
+        <span class="tag pending" style="font-size:9px">PDF Export</span>
+      </div>
+      <div style="font-size:11px;color:#64748b">Built with ❤️</div>
+    </div>
+  </div></div>`;
+}
+
 /* =======================  HELPERS  ======================= */
 const fmt = n => state.privacy ? '₹ ••••' : '₹' + Math.round(n || 0).toLocaleString('en-IN');
 function fmtCompact(n) {
@@ -736,10 +921,11 @@ function computeEMIInfo(loan) {
     monthly = calcEMI(loan.principal, loan.interestRate, months);
     totalPayable = monthly * months; totalInterest = totalPayable - loan.principal;
   } else if (loan.type==='hand') {
-    months = monthsBetween(loan.startDate, loan.endDate);
-    monthly = loan.monthlyInterest||0;        // only fixed interest each month
-    totalPayable = (loan.amount||0) + (monthly * months);  // principal returned + total interest
-    totalInterest = monthly * months;                    // interest only (as added by user)
+    // Hand loans: use end date if provided, track interest only per month
+    months = monthsBetween(loan.startDate, loan.endDate || monthsFromNowISO(12));
+    monthly = loan.monthlyInterest||0;
+    totalPayable = loan.amount||0;
+    totalInterest = monthly * months;
   } else {
     months = monthsBetween(loan.startDate, loan.endDate);
     monthly = loan.emi||0; totalPayable = loan.totalAmount||0; totalInterest = loan.interest||0;
@@ -754,8 +940,8 @@ function computeEMIInfo(loan) {
     if (paidMap[s.key]) { paidCount++; paidAmount += s.amount; }
     else { pendingCount++; if (md < curFirst) overdueCount++; if (!nextDueKey) { nextDueKey=s.key; nextDueLabel=s.label; nextDueDate=s.date; } }
   }
-  const remainingAmount = Math.max(0, totalPayable - paidAmount);
-  const progressPct = totalPayable > 0 ? (paidAmount/totalPayable)*100 : 0;
+  const remainingAmount = loan.type==='hand' ? (loan.amount||0) : Math.max(0, totalPayable - paidAmount);
+  const progressPct = loan.type==='hand' ? (months > 0 ? (paidCount/months)*100 : 0) : (totalPayable > 0 ? (paidAmount/totalPayable)*100 : 0);
   return { monthly, months, totalPayable, totalInterest, schedule, paidCount, pendingCount, overdueCount, paidAmount, remainingAmount, progressPct, nextDueKey, nextDueLabel, nextDueDate };
 }
 const loanTitle = l => l.type==='bank' ? l.loanName : l.type==='hand' ? l.personName : (l.bankName || 'Credit Card');
@@ -800,19 +986,31 @@ function setPage(p) { state.page = p; render(); window.scrollTo({top:0, behavior
 function renderTopbar() {
   document.getElementById('topDate').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
   document.getElementById('topTitle').textContent = state.page==='dashboard'?'Dashboard':state.page==='loans'?'All Loans':state.page==='monthly'?'Monthly Tracker':'Reports';
-  const chip = document.getElementById('userChip');
-  if (chip && currentUser && currentUser.email) {
+  if (currentUser && currentUser.email) {
     const email = currentUser.email;
     const initial = email.charAt(0).toUpperCase();
-    // Capitalize first letter of name, rest lowercase
     const nameRaw = email.split('@')[0];
     const displayName = nameRaw.charAt(0).toUpperCase() + nameRaw.slice(1).toLowerCase();
-    chip.innerHTML = '<span class="user-chip-avatar">' + initial + '</span><span class="user-chip-name">' + displayName + '</span>';
-  }
-  const subEl = document.getElementById('userEmail');
-  if (subEl && currentUser && currentUser.email) {
-    const nameRaw = currentUser.email.split('@')[0];
-    subEl.textContent = nameRaw.charAt(0).toUpperCase() + nameRaw.slice(1).toLowerCase();
+    const avatar = getSavedAvatar();
+    const avatarHTML = avatar ? avatar : initial;
+
+    // Update chip avatar + name
+    const chipAv = document.getElementById('chipAvatar');
+    const chipNm = document.getElementById('chipName');
+    if (chipAv) chipAv.innerHTML = avatarHTML;
+    if (chipNm) chipNm.textContent = displayName;
+
+    // Update dropdown info
+    const ddAv = document.getElementById('dropdownAvatar');
+    const ddNm = document.getElementById('dropdownName');
+    const ddEm = document.getElementById('dropdownEmail');
+    if (ddAv) ddAv.innerHTML = avatarHTML;
+    if (ddNm) ddNm.textContent = displayName;
+    if (ddEm) ddEm.textContent = email;
+
+    // Update sidebar
+    const subEl = document.getElementById('userEmail');
+    if (subEl) subEl.textContent = displayName;
   }
   const btn = document.getElementById('privacyBtn');
   const ico = document.getElementById('privacyIcon');
@@ -849,10 +1047,13 @@ function emptyState(t,s){return `<div class="empty"><div class="e-icon">📭</di
 /* =======================  LOAN CARD  ======================= */
 function loanCardHTML(loan) {
   const info = computeEMIInfo(loan); const status = loanStatus(info);
+  const monthlyLabel = loan.type==='hand' ? 'Monthly Interest' : 'Monthly EMI';
+  const totalLabel = loan.type==='hand' ? 'Principal Amount' : 'Total Payable';
+  const remainingLabel = loan.type==='hand' ? 'Principal Remaining' : 'Remaining';
   return `<div class="loan-card ${loan.type}">
     <div class="loan-head"><div class="loan-info"><div class="loan-icon">${ICONS[loan.type]}</div><div class="loan-meta"><div class="loan-name">${esc(loanTitle(loan))}</div><div class="loan-tags"><span class="tag ${loan.type}">${loanTypeLabel(loan.type)}</span><span class="tag ${status.cls}">${status.label}</span></div></div></div>
     <div class="loan-actions"><button class="act-btn" onclick="openEdit('${loan.id}')" title="Edit">${ICONS.edit}</button><button class="act-btn delete" onclick="confirmDelete('${loan.id}')" title="Delete">${ICONS.trash}</button></div></div>
-    <div class="stat-row"><div class="stat-block"><div class="label">Monthly EMI</div><div class="val">${fmtCompact(info.monthly)}</div></div><div class="stat-block"><div class="label">Total Payable</div><div class="val">${fmtCompact(info.totalPayable)}</div></div><div class="stat-block"><div class="label">Remaining</div><div class="val">${fmtCompact(info.remainingAmount)}</div></div></div>
+    <div class="stat-row"><div class="stat-block"><div class="label">${monthlyLabel}</div><div class="val">${fmtCompact(info.monthly)}</div></div><div class="stat-block"><div class="label">${totalLabel}</div><div class="val">${fmtCompact(info.totalPayable)}</div></div><div class="stat-block"><div class="label">${remainingLabel}</div><div class="val">${fmtCompact(info.remainingAmount)}</div></div></div>
     <div class="progress"><div class="progress-head"><span style="color:var(--muted)">Repayment</span><span style="color:white;font-weight:600">${info.progressPct.toFixed(0)}%</span></div><div class="progress-bar"><div class="progress-fill grad-primary" style="width:${info.progressPct}%"></div></div></div>
     <div class="loan-foot"><div class="loan-foot-text">${info.paidCount}/${info.months} paid · Next: ${info.nextDueLabel||'—'}</div><button class="view-btn" onclick="openDetail('${loan.id}')">View Schedule ${ICONS.chevR}</button></div>
   </div>`;
@@ -1039,9 +1240,13 @@ function openDetail(id){state._detail=id;renderDetail();}
 function renderDetail(){
   const l=state.loans.find(x=>x.id===state._detail);if(!l){closeModal();return;}
   const info=computeEMIInfo(l);const today=new Date();const curFirst=new Date(today.getFullYear(),today.getMonth(),1);
+  const detailTotalLabel = l.type==='hand' ? 'Principal Amount' : 'Total Payable';
+  const detailRemainingLabel = l.type==='hand' ? 'Principal Remaining' : 'Remaining';
+  const detailPaidLabel = l.type==='hand' ? 'Interest Paid' : 'Paid So Far';
+  const modalSub = l.type==='hand' ? `${loanTypeLabel(l.type)} · ${info.months} months · ${fmt(info.monthly)}/mo interest` : `${loanTypeLabel(l.type)} · ${info.months} months · ${fmt(info.monthly)}/mo`;
   document.getElementById('modals').innerHTML=`<div class="modal-overlay" onclick="if(event.target===this)closeDetail()"><div class="modal detail glass-strong">
-    <div class="modal-head"><div><div class="modal-title">${esc(loanTitle(l))}</div><div class="modal-sub">${loanTypeLabel(l.type)} · ${info.months} months · ${fmt(info.monthly)}/mo</div></div><button class="modal-close" onclick="closeDetail()">${ICONS.close}</button></div>
-    <div class="detail-stats"><div class="detail-stat"><div class="l">Total Payable</div><div class="v" style="color:#a5b4fc">${fmt(info.totalPayable)}</div></div><div class="detail-stat"><div class="l">Total Interest</div><div class="v" style="color:#fcd34d">${fmt(info.totalInterest)}</div></div><div class="detail-stat"><div class="l">Paid So Far</div><div class="v" style="color:#6ee7b7">${fmt(info.paidAmount)}</div></div><div class="detail-stat"><div class="l">Remaining</div><div class="v" style="color:#fda4af">${fmt(info.remainingAmount)}</div></div></div>
+    <div class="modal-head"><div><div class="modal-title">${esc(loanTitle(l))}</div><div class="modal-sub">${modalSub}</div></div><button class="modal-close" onclick="closeDetail()">${ICONS.close}</button></div>
+    <div class="detail-stats"><div class="detail-stat"><div class="l">${detailTotalLabel}</div><div class="v" style="color:#a5b4fc">${fmt(info.totalPayable)}</div></div><div class="detail-stat"><div class="l">Interest Shown</div><div class="v" style="color:#fcd34d">${fmt(info.totalInterest)}</div></div><div class="detail-stat"><div class="l">${detailPaidLabel}</div><div class="v" style="color:#6ee7b7">${fmt(info.paidAmount)}</div></div><div class="detail-stat"><div class="l">${detailRemainingLabel}</div><div class="v" style="color:#fda4af">${fmt(info.remainingAmount)}</div></div></div>
     <div class="modal-body">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap">
         <div><div style="font-weight:600;color:white">Repayment Schedule</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Click any month to toggle paid/unpaid</div></div>
